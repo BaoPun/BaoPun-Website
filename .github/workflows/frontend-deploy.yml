@@ -72,8 +72,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Create Pulumi stack (if needed)
-        run: pulumi stack init dev || pulumi stack select dev
+      - name: Create or select Pulumi stack
+        run: pulumi stack init BaoPun-org/BaoPun-Website/dev || pulumi stack select BaoPun-org/BaoPun-Website/dev
 
       - name: Pulumi up
         run: |
