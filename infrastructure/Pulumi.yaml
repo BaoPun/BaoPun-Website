@@ -1,4 +1,4 @@
-name: infrastructure
+name: BaoPun-Website
 description: A minimal AWS TypeScript Pulumi program
 runtime:
   name: nodejs
