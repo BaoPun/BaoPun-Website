@@ -73,7 +73,8 @@ jobs:
         run: npm ci
 
       - name: Create or select Pulumi stack
-        run: pulumi stack init BaoPun-org/BaoPun-Website/dev || pulumi stack select BaoPun-org/BaoPun-Website/dev
+        run: pulumi stack select BaoPun-org/BaoPun-Website/dev || pulumi stack init BaoPun-org/BaoPun-Website/dev
+        working-directory: infrastructure
 
       - name: Pulumi up
         run: |
