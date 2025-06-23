@@ -72,6 +72,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Create Pulumi stack (if needed)
+        run: pulumi stack init dev || pulumi stack select dev
+
       - name: Pulumi up
         run: |
           cd infrastructure
