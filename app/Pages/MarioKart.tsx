@@ -41,7 +41,7 @@ function FormatSelectorPage(){
             <div id={styles.marioKartFormatLabel}>
                 <p>This is the Mario Kart page, mainly for setting up scores for a competitive match.</p>
                 <p>Click on one of the formats below to set up teams.</p>
-                <p>Note that the 8v8 and 12v12 formats will have 24 players, while the others will have 12 players.</p>
+                <p>Note that the 8v8 and 12v12 formats will have 24 players, while the others will have 12 players by default.</p>
             </div>
 
             {/* Set up format buttons (2v2, 3v3, 4v4, 6v6, 8v8, 12v12) */}
