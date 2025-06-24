@@ -1,4 +1,18 @@
 import * as aws from "@pulumi/aws";
+import * as pulumi from "@pulumi/pulumi";
+import { Region } from "@pulumi/aws";
+
+const awsConfig = new pulumi.Config("aws");
+const awsAccessKey = awsConfig.requireSecret("accessKey");
+const awsSecretKey = awsConfig.requireSecret("secretKey");
+const awsRegion: pulumi.Input<Region> = awsConfig.require("region") as pulumi.Input<Region>;
+
+// Configure AWS provider
+const awsProvider = new aws.Provider("aws", {
+    accessKey: awsAccessKey,
+    secretKey: awsSecretKey,
+    region: awsRegion,
+});
 
 // Create a security group allowing HTTP, HTTPS, and SSH
 const webSg = new aws.ec2.SecurityGroup("web-sg", {
@@ -30,7 +44,7 @@ const server = new aws.ec2.Instance("web-server", {
     tags: {
         Name: "PulumiWebServer",
     },
-});
+} { provider: awsProvider });
 
 export const publicIp = server.publicIp;
 export const publicDns = server.publicDns;
