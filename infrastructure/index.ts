@@ -11,7 +11,7 @@ const awsRegion: pulumi.Input<Region> = awsConfig.require("region") as pulumi.In
 const awsProvider = new aws.Provider("aws", {
     accessKey: awsAccessKey,
     secretKey: awsSecretKey,
-    region: awsRegion,
+    region: awsRegion
 });
 
 // Create a security group allowing HTTP, HTTPS, and SSH
