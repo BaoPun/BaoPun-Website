@@ -44,7 +44,7 @@ const server = new aws.ec2.Instance("web-server", {
     tags: {
         Name: "PulumiWebServer",
     },
-} { provider: awsProvider });
+}, { provider: awsProvider });
 
 export const publicIp = server.publicIp;
 export const publicDns = server.publicDns;
