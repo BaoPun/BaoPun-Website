@@ -2,6 +2,7 @@ import * as aws from "@pulumi/aws";
 import * as pulumi from "@pulumi/pulumi";
 import { Region } from "@pulumi/aws";
 
+// Configure access and secret keys
 const awsConfig = new pulumi.Config("aws");
 const awsAccessKey = awsConfig.requireSecret("accessKey");
 const awsSecretKey = awsConfig.requireSecret("secretKey");
