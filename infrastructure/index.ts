@@ -55,7 +55,7 @@ try {
 const server = new aws.ec2.Instance("web-server", {
     instanceType: "t2.micro",
     vpcSecurityGroupIds: [webSg.id],
-    ami: ami.then(a => a.id),
+    ami: 'ami-011e15a70256b7f26',
     keyName: keyPair.keyName, //Key pair is needed to SSH into the instance
     tags: {
         Name: "PulumiWebServer",
