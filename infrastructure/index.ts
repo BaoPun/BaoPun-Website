@@ -16,7 +16,7 @@ const awsProvider = new aws.Provider("aws", {
 });
 
 // Create a security group allowing HTTP, HTTPS, and SSH
-const webSg = new aws.ec2.SecurityGroup("web-sg", {
+const webSg = new aws.ec2.SecurityGroup("web-sg",{
     description: "Allow HTTP, HTTPS, and SSH",
     ingress: [
         { protocol: "tcp", fromPort: 22, toPort: 22, cidrBlocks: ["0.0.0.0/0"] },   // SSH
