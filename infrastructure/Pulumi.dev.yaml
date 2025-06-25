@@ -3,4 +3,4 @@ config:
   aws:accessKey:
     secure: AAABAEKptBd455WZNIqiCFQ9ql1wBcgLyk6egaKu17qDiHY7JBhVHiNZRTjHkpixVne7WQ==
   aws:secretKey:
-    secure: AAABAJc4cuLGHdOcX7bj0klND/d2XQzMrGn1dzLskNKIR3+YuAQ7bkQip0j1pCYX12x9yf/b91pX4SJviwgie60q2alVR6Yi
+    secure: AAABAPWZtnAph0vU/rgDUI+niLNj8Pcm2fXwDhZaFn+tTEdafSdv+bhVFHDPcYvF3l/oXlubm50Z+Qw/TBtvWp/nA0sjaxL6
