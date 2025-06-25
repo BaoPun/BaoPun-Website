@@ -76,7 +76,7 @@ jobs:
       - name: Destroy old Pulumi stack
         run: |
           pulumi stack select BaoPun-org/BaoPun-Website/dev || pulumi stack init BaoPun-org/BaoPun-Website/dev
-          pulumi stack rm dev
+          pulumi stack rm dev --yes
         working-directory: infrastructure
 
       - name: Create or select Pulumi stack
