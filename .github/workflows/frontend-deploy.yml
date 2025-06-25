@@ -73,6 +73,11 @@ jobs:
         run: npm ci
         working-directory: infrastructure
 
+      - name: Destroy old Pulumi stack
+        run: |
+          pulumi stack select BaoPun-org/BaoPun-Website/dev || pulumi stack init BaoPun-org/BaoPun-Website/dev
+          pulumi destroy --yes
+
       - name: Create or select Pulumi stack
         run: pulumi stack select BaoPun-org/BaoPun-Website/dev || pulumi stack init BaoPun-org/BaoPun-Website/dev
         working-directory: infrastructure
