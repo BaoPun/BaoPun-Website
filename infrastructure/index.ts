@@ -37,13 +37,29 @@ const ami = aws.ec2.getAmi({
     ],
 });
 
+// Create key pair
+const keyPairName = "baopun-website-key";
+let keyPair: aws.ec2.KeyPair;
+try {
+    // Try to get the existing key pair
+    keyPair = aws.ec2.KeyPair.get("existingKeyPair", keyPairName);
+} catch (error) {
+    // If the key pair doesn't exist, create a new one
+    keyPair = new aws.ec2.KeyPair("baopun-website-keypair", {
+        keyName: keyPairName,
+        publicKey: "ssh-rsa XXX"
+    }, {provider: awsProvider});
+}
+
 // Create a t2.micro EC2 instance
 const server = new aws.ec2.Instance("web-server", {
     instanceType: "t2.micro",
     vpcSecurityGroupIds: [webSg.id],
     ami: ami.then(a => a.id),
+    keyName: keyPair.keyName, //Key pair is needed to SSH into the instance
     tags: {
         Name: "PulumiWebServer",
+        Environment: "development",
     },
 }, { provider: awsProvider });
 
