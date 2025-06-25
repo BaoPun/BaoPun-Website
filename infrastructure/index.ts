@@ -28,14 +28,14 @@ const webSg = new aws.ec2.SecurityGroup("web-sg",{
     ],
 });
 
-// Get the latest Amazon Linux 2 AMI
+/*// Get the latest Amazon Linux 2 AMI
 const ami = aws.ec2.getAmi({
     mostRecent: true,
     owners: ["amazon"],
     filters: [
         { name: "name", values: ["amzn2-ami-hvm-*-x86_64-gp2"] },
     ],
-});
+});*/
 
 // Create key pair
 const keyPairName = "baopun-website-key";
