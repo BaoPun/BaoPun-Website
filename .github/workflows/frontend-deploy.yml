@@ -73,24 +73,8 @@ jobs:
         run: npm ci
         working-directory: infrastructure
 
-      - name: Export secrets
-        run: pulumi stack export --stack BaoPun-org/BaoPun-Website/dev > stack.json
-        working-directory: infrastructure
-        continue-on-error: true
-
-      - name: Destroy old Pulumi stack
-        run: |
-          pulumi stack select BaoPun-org/BaoPun-Website/dev
-          pulumi stack rm BaoPun-org/BaoPun-Website/dev --preserve-config --yes
-        working-directory: infrastructure
-        continue-on-error: true
-
       - name: Create or select Pulumi stack
-        run: pulumi stack select BaoPun-org/BaoPun-Website/dev || pulumi stack init BaoPun-org/BaoPun-Website/dev
-        working-directory: infrastructure
-
-      - name: Import stacks
-        run: pulumi stack import --stack BaoPun-org/BaoPun-Website/dev < stack.json
+        run: pulumi stack select BaoPun-org/BaoPun-Website/dev
         working-directory: infrastructure
 
       - name: Pulumi up
