@@ -79,16 +79,16 @@ jobs:
 
       - name: Destroy old Pulumi stack
         run: |
-          pulumi stack select BaoPun-org/BaoPun-Website/dev || pulumi stack init BaoPun-org/BaoPun-Website/dev
-          pulumi stack rm BaoPun-org/BaoPun-Website/dev --preserve-config --yes
+          pulumi stack select BaoPun-org/BaoPun-Website/dev
+          pulumi stack rm BaoPun-org/BaoPun-Website/dev  --yes
         working-directory: infrastructure
 
       - name: Create or select Pulumi stack
-        run: pulumi stack select BaoPun-org/BaoPun-Website/dev || pulumi stack init BaoPun-org/BaoPun-Website/dev
+        run: pulumi stack init BaoPun-org/BaoPun-Website/dev --yes
         working-directory: infrastructure
 
       - name: Import stacks
-        run: pulumi stack import --stack BaoPun-org/BaoPun-Website/dev < stack.json
+        run: pulumi stack import --stack BaoPun-org/BaoPun-Website/dev < stack.json --yes
         working-directory: infrastructure
 
       - name: Pulumi up
