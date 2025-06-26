@@ -3,3 +3,4 @@ config:
     secure: AAABAM2H1R9FTf0qJ93CH0GF2NuUuPC4iW6pfI3RdMP1ZO9O99gbFNtIVR3kiNqUD7rg4UTHX61xHMpytTTBaLsb6T+eed9t
   aws:accessKey:
     secure: AAABAHUenioYJIalH3nR/Y/fGMcYsBykHImICAITyrJ8w0UF759piE1CdNuskz+vkb1YoA==
+  aws:region: us-west-2
