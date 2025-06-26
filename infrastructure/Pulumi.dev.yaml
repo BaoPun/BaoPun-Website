@@ -1,6 +1,6 @@
 config:
   aws:region: us-west-2
   aws:accessKey:
-    secure: AAABAI1wwCdAUt3OLy0DMrd9deqhbN9TNpzBycs6lkwP5PSz30eDBwYn30lRkVwg/AwYnw==
+    secure: AAABAJL8i3hitzVHgAB5vjHuHX6STm1Q9rU1FQtwm0yOF0lYlR563LrPGzs02bxqyfABHQ==
   aws:secretKey:
-    secure: AAABAJdp3ecS2EiKiUjyYOK1Z+4JE3V8lj2ld7YhBj/k9diF0wDlEgyd3QjIm00eqmBtaxHGNP5qU13rClvX69xmCXqzIGTn
+    secure: AAABALTw7l0egF55/w2P9s3WE9WhlSquBihixqYC/AG3SLzZFv0Pnhrn2cqQmZtpCPArSTe69jXnBbS+j6pgmXlhjAwzfBtI
