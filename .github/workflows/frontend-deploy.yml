@@ -76,28 +76,30 @@ jobs:
       - name: Export secrets
         run: pulumi stack export --stack BaoPun-org/BaoPun-Website/dev > stack.json
         working-directory: infrastructure
+        continue-on-error: true
 
       - name: Destroy old Pulumi stack
         run: |
           pulumi stack select BaoPun-org/BaoPun-Website/dev
-          pulumi stack rm BaoPun-org/BaoPun-Website/dev  --yes
+          pulumi stack rm BaoPun-org/BaoPun-Website/dev --preserve-config --yes
         working-directory: infrastructure
+        continue-on-error: true
 
       - name: Create or select Pulumi stack
-        run: pulumi stack init BaoPun-org/BaoPun-Website/dev
+        run: pulumi stack select BaoPun-org/BaoPun-Website/dev || pulumi stack init BaoPun-org/BaoPun-Website/dev
         working-directory: infrastructure
 
       - name: Import stacks
-        run: pulumi stack import --stack BaoPun-org/BaoPun-Website/dev < stack.json --yes
+        run: pulumi stack import --stack BaoPun-org/BaoPun-Website/dev < stack.json
         working-directory: infrastructure
 
       - name: Pulumi up
         run: pulumi up --yes
         working-directory: infrastructure
         env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }} 
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }} 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
 
   ansible:
     needs: pulumi
