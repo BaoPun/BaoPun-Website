@@ -21,7 +21,7 @@ jobs:
 
       - name: Verify ACM Certificate on www.baopunny.studio
         run: |
-          DOMAIN="www.baopunny.studio
+          DOMAIN="www.baopunny.studio"
           ARN=$(aws acm list-certificates --query "CertificateSummaryList[?DomainName=='$DOMAIN'].CertificateArn" --output text)
           if [ -z "$ARN" ]; then
             echo "No ACM certificate found for $DOMAIN"
