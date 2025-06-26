@@ -84,7 +84,7 @@ jobs:
         working-directory: infrastructure
 
       - name: Create or select Pulumi stack
-        run: pulumi stack init BaoPun-org/BaoPun-Website/dev --yes
+        run: pulumi stack init BaoPun-org/BaoPun-Website/dev
         working-directory: infrastructure
 
       - name: Import stacks
