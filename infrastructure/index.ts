@@ -8,12 +8,25 @@ const awsAccessKey = awsConfig.requireSecret("accessKey");
 const awsSecretKey = awsConfig.requireSecret("secretKey");
 const awsRegion: pulumi.Input<Region> = awsConfig.require("region") as pulumi.Input<Region>;
 
+// Domain
+const domain = "www.baopunny.studio";
+
 // Configure AWS provider
 const awsProvider = new aws.Provider("aws", {
     accessKey: awsAccessKey,
     secretKey: awsSecretKey,
     region: awsRegion
 });
+
+// Get certificate
+const certificate = aws.acm.getCertificate(
+  {
+    domain,
+    statuses: ["ISSUED"],      // ignore PENDING_VALIDATION / EXPIRED
+    //mostSpecific: true,
+  },
+  { async: true }
+);
 
 // Create a security group allowing HTTP, HTTPS, and SSH
 const webSg = new aws.ec2.SecurityGroup("web-sg",{
@@ -57,3 +70,4 @@ const server = new aws.ec2.Instance("web-server", {
 export const publicIp = server.publicIp;
 export const publicDns = server.publicDns;
 export const keyName = keyPair.keyName;
+export const publicId = server.id;
