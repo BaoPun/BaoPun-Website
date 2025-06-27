@@ -6,7 +6,6 @@ import { Region } from "@pulumi/aws";
 const awsConfig = new pulumi.Config("aws");
 const awsAccessKey = awsConfig.requireSecret("accessKey");
 const awsSecretKey = awsConfig.requireSecret("secretKey");
-const awsInstanceId = 'i-0ea244ff1173d8149';
 const awsRegion: pulumi.Input<Region> = awsConfig.require("region") as pulumi.Input<Region>;
 
 // Domain
@@ -64,7 +63,7 @@ const instanceInfo = aws.ec2.getInstance({
             values: ['PulumiWebServer'],
         },
     ],
-});
+}, { provider: awsProvider });
 const instance = instanceInfo.then(info =>
     aws.ec2.Instance.get("existing-instance", info.id)
 );
