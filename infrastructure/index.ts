@@ -65,7 +65,7 @@ const instanceInfo = aws.ec2.getInstance({
         },
     ],
 });
-const server = instanceInfo.then(info =>
+const instance = instanceInfo.then(info =>
     aws.ec2.Instance.get("existing-instance", info.id)
 );
 
@@ -80,7 +80,7 @@ const server = instanceInfo.then(info =>
     },
 }, { provider: awsProvider });*/
 
-export const publicIp = server.publicIp;
-export const publicDns = server.publicDns;
+export const publicIp = instance.then(i => i.publicIp);
+export const publicDns = instance.then(i => i.publicDns);
 export const keyName = keyPair.keyName;
-export const publicId = server.id;
+export const publicId = instance.then(i => i.id);
