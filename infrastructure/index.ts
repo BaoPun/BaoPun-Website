@@ -6,6 +6,7 @@ import { Region } from "@pulumi/aws";
 const awsConfig = new pulumi.Config("aws");
 const awsAccessKey = awsConfig.requireSecret("accessKey");
 const awsSecretKey = awsConfig.requireSecret("secretKey");
+const awsInstanceId = awsConfig.requireSecret("instanceId");
 const awsRegion: pulumi.Input<Region> = awsConfig.require("region") as pulumi.Input<Region>;
 
 // Domain
@@ -56,7 +57,7 @@ try {
 }
 
 // Create a t2.micro EC2 instance
-const server = new aws.ec2.Instance("web-server", {
+const server = aws.ec2.Instance.get("web-server", "");/*new aws.ec2.Instance("web-server", {
     instanceType: "t2.micro",
     vpcSecurityGroupIds: [webSg.id],
     ami: 'ami-011e15a70256b7f26',
@@ -65,7 +66,7 @@ const server = new aws.ec2.Instance("web-server", {
         Name: "PulumiWebServer",
         Environment: "development",
     },
-}, { provider: awsProvider });
+}, { provider: awsProvider });*/
 
 export const publicIp = server.publicIp;
 export const publicDns = server.publicDns;

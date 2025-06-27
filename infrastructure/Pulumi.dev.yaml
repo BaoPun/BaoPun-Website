@@ -4,3 +4,5 @@ config:
   aws:accessKey:
     secure: AAABAMAt8cY/J3ILovPUACUjKOQvQ5BnIFs9tBtUgHdblu8P+j29pxjNkSY2M5WTAX/TiA==
   aws:region: us-west-2
+  aws:instanceId:
+    secure: AAABAHiiC0RZmkOY3Sn263tEpEbQb1M1AaDTCJf9XEvHjObm94PvBnyMNu4/ihvrpEPr
