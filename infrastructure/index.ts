@@ -61,12 +61,12 @@ const instanceInfo = aws.ec2.getInstance({
     filters: [
         {
             name: "tag:Name",
-            values: ['web-server'],
+            values: ['PulumiWebServer'],
         },
     ],
 });
 const instance = instanceInfo.then(info =>
-    aws.ec2.Instance.get("PulumiWebServer", info.id)
+    aws.ec2.Instance.get("existing-instance", info.id)
 );
 
 /*new aws.ec2.Instance("web-server", {
