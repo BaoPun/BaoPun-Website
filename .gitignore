@@ -2,6 +2,7 @@
 /node_modules/
 .dockerignore
 .env
+*.pem
 
 # React Router
 /.react-router/

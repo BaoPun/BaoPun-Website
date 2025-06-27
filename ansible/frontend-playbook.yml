@@ -1,0 +1,117 @@
+---
+- name: Deploy Frontend Application with Docker, Nginx, and SSL
+  hosts: frontend
+  become: yes
+
+  vars:
+    frontend_image: "your-frontend-image:latest"
+    frontend_container_name: "frontend_app"
+    frontend_env:
+      NODE_ENV: "production"
+    frontend_port: 3000
+    ssl_cert_dir: "/etc/ssl/myfrontend"
+    ssl_cert_src: "files/fullchain.pem"
+    ssl_cert_dest: "{{ ssl_cert_dir }}/fullchain.pem"
+    ssl_key_src: "files/privkey.pem"
+    ssl_key_dest: "{{ ssl_cert_dir }}/privkey.pem"
+    nginx_conf_src: "templates/nginx.conf.j2"
+    nginx_conf_dest: "/etc/nginx/nginx.conf"
+
+  tasks:
+    - name: Install required system packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - software-properties-common
+        state: present
+        update_cache: yes
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
+        state: present
+
+    - name: Install Docker and Docker Compose
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose
+        state: present
+        update_cache: yes
+
+    - name: Ensure Docker service is running
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Pull frontend container image
+      docker_image:
+        name: "{{ frontend_image }}"
+        source: pull
+
+    - name: Start frontend container
+      docker_container:
+        name: "{{ frontend_container_name }}"
+        image: "{{ frontend_image }}"
+        env: "{{ frontend_env }}"
+        restart_policy: always
+        ports:
+          - "{{ frontend_port }}:{{ frontend_port }}"
+
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Create SSL certificates directory
+      file:
+        path: "{{ ssl_cert_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: '0755'
+
+    - name: Copy SSL certificate
+      copy:
+        src: "{{ ssl_cert_src }}"
+        dest: "{{ ssl_cert_dest }}"
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Copy SSL key
+      copy:
+        src: "{{ ssl_key_src }}"
+        dest: "{{ ssl_key_dest }}"
+        owner: root
+        group: root
+        mode: '0600'
+
+    - name: Configure Nginx with SSL certificate
+      template:
+        src: "{{ nginx_conf_src }}"
+        dest: "{{ nginx_conf_dest }}"
+        mode: '0644'
+      notify: Restart Nginx
+
+    - name: Ensure Nginx is running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
