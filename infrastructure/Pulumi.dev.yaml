@@ -1,0 +1,5 @@
+config:
+  aws:secretKey:
+    secure: AAABACR9Jyd4atXEJZLIliXDCapznvKiZCyPbWWgp4Ut78JxrdkgtFnF79o0JCDRDtAR4ixeP9i8eZnhLvPX0Zk5PtZknqTN
+  aws:accessKey:
+    secure: AAABAMAt8cY/J3ILovPUACUjKOQvQ5BnIFs9tBtUgHdblu8P+j29pxjNkSY2M5WTAX/TiA==
