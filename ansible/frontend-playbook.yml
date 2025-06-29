@@ -16,6 +16,11 @@
     ssl_key_dest: "{{ ssl_cert_dir }}/privkey.pem"
     nginx_conf_src: "templates/nginx.conf.j2"
     nginx_conf_dest: "/etc/nginx/nginx.conf"
+    node_version: "20.x"
+    
+
+  vars_files:
+    - vars/secrets.yml
 
   tasks:
     - name: Install required system packages
