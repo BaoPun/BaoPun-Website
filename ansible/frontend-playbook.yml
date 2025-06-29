@@ -1,6 +1,6 @@
 ---
 - name: Deploy Frontend Application with Docker, Nginx, and SSL
-  hosts: frontend
+  hosts: baopun-website
   become: yes
 
   vars:
