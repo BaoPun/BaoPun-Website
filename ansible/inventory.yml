@@ -3,4 +3,3 @@ all:
     baopun-website:
       ansible_host: 54.187.202.40
       ansible_user: ec2_user
-      ansible_ssh_private_key_file: ./../baopun-website-key.pem
