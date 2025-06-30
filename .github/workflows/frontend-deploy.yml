@@ -114,7 +114,7 @@ jobs:
 
       - name: Run Ansible Playbook
         env:
-          ANSIBLE_HOST_KEY_CHECKING: "False"
+          ANSIBLE_HOST_KEY_CHECKING: 'False'
         run: |
           cd ansible
           ansible-playbook -i inventory.yml frontend-playbook.yml --private-key ~/.ssh/baopun-website-key.pem
