@@ -107,11 +107,13 @@ jobs:
 
       - name: Set up SSH key
         run: |
-          chmod 600 ~/baopun-website-key.pem
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/baopun-website-key.pem
+          chmod 600 ~/.ssh/baopun-website-key.pem
 
       - name: Run Ansible Playbook
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
           cd ansible
-          ansible-playbook -i inventory.yml frontend-playbook.yml --private-key ~/baopun-website-key.pem
+          ansible-playbook -i inventory.yml frontend-playbook.yml --private-key ~/.ssh/baopun-website-key.pem
