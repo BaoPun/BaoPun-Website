@@ -109,4 +109,5 @@ jobs:
         env:
           ANSIBLE_HOST_KEY_CHECKING: "False"
         run: |
+          cd ansible
           ansible-playbook -i ansible/inventory.yml ansible/frontend-playbook.yml --private-key "${{ secrets.SSH_PRIVATE_KEY }}"
