@@ -110,6 +110,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/baopun-website-key.pem
           chmod 600 ~/.ssh/baopun-website-key.pem
+          ssh-keyscan -H ${{ secrets.EC2_IP }} >> ~/.ssh/known_hosts
 
       - name: Run Ansible Playbook
         env:
