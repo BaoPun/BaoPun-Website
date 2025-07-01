@@ -118,4 +118,4 @@ jobs:
         run: |
           cd ansible
           chmod 600 ~/.ssh/baopun-website-key.pem
-          ansible-playbook -i inventory.yml frontend-playbook.yml --private-key ~/.ssh/baopun-website-key.pem -vvv
+          ansible-playbook -i inventory.yml frontend-playbook.yml --private-key ~/.ssh/baopun-website-key.pem 
