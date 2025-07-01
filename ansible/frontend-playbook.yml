@@ -10,49 +10,33 @@
       NODE_ENV: "production"
     frontend_port: 3000
     ssl_cert_dir: "/etc/ssl/myfrontend"
-    ssl_cert_src: "files/fullchain.pem"
+    ssl_cert_src: "files/acm_certificate.pem"      # Exported from ACM
     ssl_cert_dest: "{{ ssl_cert_dir }}/fullchain.pem"
-    ssl_key_src: "files/privkey.pem"
+    ssl_key_src: "files/acm_private_key.pem"       # Exported from ACM
     ssl_key_dest: "{{ ssl_cert_dir }}/privkey.pem"
     nginx_conf_src: "templates/nginx.conf.j2"
     nginx_conf_dest: "/etc/nginx/nginx.conf"
-    node_version: "20.x"
-    
-
-  vars_files:
-    - vars/env.yml
-    - vars/secrets.yml
 
   tasks:
     - name: Install required system packages
       yum:
         name:
-          - apt-transport-https
           - ca-certificates
           - curl
-          - software-properties-common
         state: present
         update_cache: yes
 
-    - name: Add Docker GPG key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker repository
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
-        state: present
-
-    - name: Install Docker and Docker Compose
+    - name: Install Docker
       yum:
         name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-          - docker-compose
+          - docker
         state: present
-        update_cache: yes
+
+    - name: Install Docker Compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-`uname -s`-`uname -m`
+        dest: /usr/local/bin/docker-compose
+        mode: '0755'
 
     - name: Ensure Docker service is running
       service:
@@ -87,43 +71,6 @@
         group: root
         mode: '0755'
 
-    - name: Copy SSL certificate
-      copy:
-        src: "{{ ssl_cert_src }}"
-        dest: "{{ ssl_cert_dest }}"
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Copy SSL key
-      copy:
-        src: "{{ ssl_key_src }}"
-        dest: "{{ ssl_key_dest }}"
-        owner: root
-        group: root
-        mode: '0600'
-
-    - name: Configure Nginx with SSL certificate
-      template:
-        src: "{{ nginx_conf_src }}"
-        dest: "{{ nginx_conf_dest }}"
-        mode: '0644'
-      notify: Restart Nginx
-
-    - name: Ensure Nginx is running
-      service:
-        name: nginx
-        state: started
-        enabled: yes
-
-    - name: Create SSL certificates directory
-      file:
-        path: "{{ ssl_cert_dir }}"
-        state: directory
-        owner: root
-        group: root
-        mode: '0755'
-
     - name: Copy ACM SSL certificate
       copy:
         src: "{{ ssl_cert_src }}"
@@ -146,6 +93,12 @@
         dest: "{{ nginx_conf_dest }}"
         mode: '0644'
       notify: Restart Nginx
+
+    - name: Ensure Nginx is running
+      service:
+        name: nginx
+        state: started
+        enabled: yes
 
   handlers:
     - name: Restart Nginx
