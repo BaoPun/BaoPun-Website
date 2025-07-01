@@ -60,12 +60,27 @@ const instanceInfo = aws.ec2.getInstance({
     filters: [
         {
             name: "tag:Name",
-            values: ['PulumiWebServer'],
+            values: ['BaoWebServer'],
         },
     ],
 }, { provider: awsProvider });
-const instance = instanceInfo.then(info =>
-    aws.ec2.Instance.get("existing-instance", info.id)
+
+
+const instance = instanceInfo.then(
+    // Retrieve existing instance
+    info => aws.ec2.Instance.get("existing-instance", info.id),
+
+    // Or create new one if does not exist
+    () => new aws.ec2.Instance("web-server", {
+        instanceType: "t2.micro",
+        vpcSecurityGroupIds: [webSg.id],
+        ami: 'ami-05ee755be0cd7555c', // Replace with your AMI
+        keyName: keyPair.keyName,
+        tags: {
+            Name: "BaoWebServer",
+            Environment: "development",
+        },
+    }, { provider: awsProvider })
 );
 
 /*new aws.ec2.Instance("web-server", {
