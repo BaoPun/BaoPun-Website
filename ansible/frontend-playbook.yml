@@ -4,7 +4,7 @@
   become: yes
 
   vars:
-    frontend_image: "your-frontend-image:latest"
+    frontend_image: "nginx:latest"
     frontend_container_name: "frontend_app"
     frontend_env:
       NODE_ENV: "production"
