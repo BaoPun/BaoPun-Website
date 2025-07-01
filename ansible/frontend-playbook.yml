@@ -18,84 +18,18 @@
     nginx_conf_dest: "/etc/nginx/nginx.conf"
 
   tasks:
-    - name: Install required system packages
+    - name: Install nginx
       apt:
-        name:
-          - apt-transport-https
-          - ca-certificates
-          - curl
-          - software-properties-common
-        state: present
-        update_cache: yes
+        name: nginx
+        state: latest
 
-    - name: Add Docker GPG key
-      apt_key:
-        url: https://download.docker.com/linux/ubuntu/gpg
-        state: present
-
-    - name: Add Docker repository
-      apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable
-        state: present
-
-    - name: Install Docker and Docker Compose
-      apt:
-        name:
-          - docker-ce
-          - docker-ce-cli
-          - containerd.io
-          - docker-compose
-        state: present
-        update_cache: yes
-
-    - name: Ensure Docker service is running
+    - name: Start nginx
       service:
-        name: docker
+        name: nginx
         state: started
         enabled: yes
 
-    - name: Pull frontend container image
-      docker_image:
-        name: "{{ frontend_image }}"
-        source: pull
-
-    - name: Start frontend container
-      docker_container:
-        name: "{{ frontend_container_name }}"
-        image: "{{ frontend_image }}"
-        env: "{{ frontend_env }}"
-        restart_policy: always
-        ports:
-          - "{{ frontend_port }}:{{ frontend_port }}"
-
-    - name: Install Nginx
-      apt:
-        name: nginx
-        state: present
-
-    - name: Create SSL certificates directory
-      file:
-        path: "{{ ssl_cert_dir }}"
-        state: directory
-        owner: root
-        group: root
-        mode: '0755'
-
-    - name: Copy ACM SSL certificate
-      copy:
-        src: "{{ ssl_cert_src }}"
-        dest: "{{ ssl_cert_dest }}"
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Copy ACM SSL private key
-      copy:
-        src: "{{ ssl_key_src }}"
-        dest: "{{ ssl_key_dest }}"
-        owner: root
-        group: root
-        mode: '0600'
+    
 
     - name: Configure Nginx with SSL certificate
       template:
