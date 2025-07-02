@@ -74,6 +74,10 @@
         group: root
         mode: '0755'
 
+    - name: Set ACM passphrase file path dynamically
+      set_fact:
+        acm_passphrase_file: "/tmp/acm_passphrase_{{ ansible_date_time.epoch }}.txt"
+
     - name: Generate ACM passphrase file if not present
       shell: "openssl rand -base64 32 > {{ acm_passphrase_file }}"
       args:
