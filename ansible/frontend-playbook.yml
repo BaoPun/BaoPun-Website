@@ -109,21 +109,13 @@
         dest: "{{ ssl_cert_dir }}/chain.pem"
         mode: '0644'
 
-    - name: Copy ACM SSL certificate
-      copy:
-        src: "{{ ssl_cert_src }}"
-        dest: "{{ ssl_cert_dest }}"
-        owner: root
-        group: root
-        mode: '0644'
-
-    - name: Copy ACM SSL private key
-      copy:
-        src: "{{ ssl_key_src }}"
-        dest: "{{ ssl_key_dest }}"
-        owner: root
-        group: root
-        mode: '0600'
+    #- name: Copy ACM SSL certificate
+    #  copy:
+    #    src: "{{ ssl_cert_src }}"
+    #    dest: "{{ ssl_cert_dest }}"
+    #    owner: root
+    #    group: root
+    #    mode: '0644'
 
     - name: Configure Nginx with SSL certificate
       template:
