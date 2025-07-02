@@ -1,5 +1,5 @@
 ---
-- name: Deploy Frontend Application with Docker, Nginx, and SSL
+- name: Deploy Frontend Application with Docker and Nginx (SSL at ALB)
   hosts: baopun-website
   become: yes
 
@@ -9,11 +9,6 @@
     frontend_env:
       NODE_ENV: "production"
     frontend_port: 3000
-    ssl_cert_dir: "/etc/ssl/myfrontend"
-    ssl_cert_src: "files/acm_certificate.pem"      # Exported from ACM
-    ssl_cert_dest: "{{ ssl_cert_dir }}/fullchain.pem"
-    ssl_key_src: "files/acm_private_key.pem"       # Exported from ACM
-    ssl_key_dest: "{{ ssl_cert_dir }}/privkey.pem"
     nginx_conf_src: "templates/nginx.conf.j2"
     nginx_conf_dest: "/etc/nginx/nginx.conf"
 
@@ -66,58 +61,7 @@
         name: nginx
         state: present
 
-    - name: Create SSL certificates directory
-      file:
-        path: "{{ ssl_cert_dir }}"
-        state: directory
-        owner: root
-        group: root
-        mode: '0755'
-
-    - name: Get ACM certificate
-      shell: |
-        aws acm get-certificate \
-          --certificate-arn "{{ aws_acm_certificate_arn }}" \
-          --region {{ aws_region }} \
-          --output json > /tmp/acm_get_certificate.json
-      environment:
-        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
-        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
-        AWS_DEFAULT_REGION: "{{ aws_region }}"
-      register: get_cert_result
-      failed_when: get_cert_result.rc != 0
-
-    - name: Slurp ACM certificate JSON from remote host
-      slurp:
-        src: /tmp/acm_get_certificate.json
-      register: acm_cert_json
-
-    - name: Parse ACM certificate
-      set_fact:
-        acm_certificate_body: "{{ (acm_cert_json.content | b64decode | from_json).Certificate }}"
-        acm_certificate_chain: "{{ (acm_cert_json.content | b64decode | from_json).CertificateChain }}"
-
-    - name: Write certificate file
-      copy:
-        content: "{{ acm_certificate_body }}"
-        dest: "{{ ssl_cert_dest }}"
-        mode: '0644'
-
-    - name: Write certificate chain file
-      copy:
-        content: "{{ acm_certificate_chain }}"
-        dest: "{{ ssl_cert_dir }}/chain.pem"
-        mode: '0644'
-
-    #- name: Copy ACM SSL certificate
-    #  copy:
-    #    src: "{{ ssl_cert_src }}"
-    #    dest: "{{ ssl_cert_dest }}"
-    #    owner: root
-    #    group: root
-    #    mode: '0644'
-
-    - name: Configure Nginx with SSL certificate
+    - name: Configure Nginx for HTTP only (SSL handled by ALB)
       template:
         src: "{{ nginx_conf_src }}"
         dest: "{{ nginx_conf_dest }}"

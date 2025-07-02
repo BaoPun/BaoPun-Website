@@ -130,7 +130,6 @@ const targetGroup = new aws.lb.TargetGroup("web-tg", {
     vpcId: defaultVpc.then(v => v.id),
     healthCheck: {
         path: "/",
-        protocol: "HTTP",
     },
 }, { provider: awsProvider });
 
@@ -143,13 +142,14 @@ instance.then(inst =>
     }, { provider: awsProvider })
 );
 
+
 // Create a listener for HTTPS using the ACM certificate
 new aws.lb.Listener("web-https-listener", {
     loadBalancerArn: alb.arn,
     port: 443,
     protocol: "HTTPS",
     sslPolicy: "ELBSecurityPolicy-2016-08",
-    certificateArn: certificate.then(c => c.arn),
+    certificateArn: certificateArn,
     defaultActions: [{
         type: "forward",
         targetGroupArn: targetGroup.arn,
@@ -173,7 +173,7 @@ new aws.lb.Listener("web-http-listener", {
 
 // Export the ALB DNS name
 export const albDns = alb.dnsName;
-export const publicIp = instance.then(i => i.publicIp);
+/*export const publicIp = instance.then(i => i.publicIp);
 export const publicDns = instance.then(i => i.publicDns);
 export const keyName = keyPair.keyName;
-export const publicId = instance.then(i => i.id);
+export const publicId = instance.then(i => i.id);*/
