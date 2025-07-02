@@ -103,12 +103,6 @@
         dest: "{{ ssl_cert_dest }}"
         mode: '0644'
 
-    - name: Write private key file
-      copy:
-        content: "{{ acm_private_key }}"
-        dest: "{{ ssl_key_dest }}"
-        mode: '0600'
-
     - name: Write certificate chain file
       copy:
         content: "{{ acm_certificate_chain }}"
