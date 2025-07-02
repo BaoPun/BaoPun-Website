@@ -83,15 +83,15 @@
       args:
         creates: "{{ acm_passphrase_file }}"
 
-    - name: Export ACM certificate
+    - name: Get ACM certificate
       shell: |
-        aws acm export-certificate \
+        aws acm get-certificate \
           --certificate-arn "{{ aws_acm_certificate_arn }}" \
           --region {{ aws_region }} \
           --passphrase fileb://{{ acm_passphrase_file }} \
-          --output json > /tmp/acm_export.json
+          --output json > /tmp/acm_get_certificate.json
       args:
-        creates: /tmp/acm_export.json
+        creates: /tmp/acm_get_certificate.json
       environment:
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
@@ -99,16 +99,11 @@
       register: export_result
       failed_when: export_result.rc != 0
 
-    - name: Show export command result
-      debug:
-        msg: "Did /tmp/acm_export.json get created? {{ lookup('file', '/tmp/acm_export.json') | default('NOT FOUND', true) }}"
-      ignore_errors: yes
-
     - name: Parse exported certificate
       set_fact:
-        acm_certificate_body: "{{ lookup('file', '/tmp/acm_export.json') | from_json | json_query('Certificate') }}"
-        acm_certificate_chain: "{{ lookup('file', '/tmp/acm_export.json') | from_json | json_query('CertificateChain') }}"
-        acm_private_key: "{{ lookup('file', '/tmp/acm_export.json') | from_json | json_query('PrivateKey') }}"
+        acm_certificate_body: "{{ lookup('file', '/tmp/acm_get_certificate.json') | from_json | json_query('Certificate') }}"
+        acm_certificate_chain: "{{ lookup('file', '/tmp/acm_get_certificate.json') | from_json | json_query('CertificateChain') }}"
+        acm_private_key: "{{ lookup('file', '/tmp/acm_get_certificate.json') | from_json | json_query('PrivateKey') }}"
 
     - name: Write certificate file
       copy:
