@@ -89,6 +89,10 @@
       register: get_cert_result
       failed_when: get_cert_result.rc != 0
 
+    - name: Debug ACM get-certificate result
+      debug:
+        var: get_cert_result
+
     - name: Parse ACM certificate
       set_fact:
         acm_certificate_body: "{{ lookup('file', '/tmp/acm_get_certificate.json') | from_json | json_query('Certificate') }}"
