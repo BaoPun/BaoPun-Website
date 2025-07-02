@@ -118,6 +118,6 @@ jobs:
         run: |
           cd ansible
           chmod 600 ~/.ssh/baopun-website-key.pem
-          echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > .vault-password
-          chmod 600 .vault-password
-          ansible-playbook -i inventory.yml frontend-playbook.yml --private-key ~/.ssh/baopun-website-key.pem --vault-password-file .vault-password
+          echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > ~/.vault-password
+          chmod 600 ~/.vault-password
+          ansible-playbook -i inventory.yml frontend-playbook.yml --private-key ~/.ssh/baopun-website-key.pem --vault-password-file ~/.vault-password
