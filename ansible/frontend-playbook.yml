@@ -74,21 +74,11 @@
         group: root
         mode: '0755'
 
-    - name: Set ACM passphrase file path dynamically
-      set_fact:
-        acm_passphrase_file: "/tmp/acm_passphrase_{{ ansible_date_time.epoch }}.txt"
-
-    - name: Generate ACM passphrase file if not present
-      shell: "openssl rand -base64 32 > {{ acm_passphrase_file }}"
-      args:
-        creates: "{{ acm_passphrase_file }}"
-
     - name: Get ACM certificate
       shell: |
         aws acm get-certificate \
           --certificate-arn "{{ aws_acm_certificate_arn }}" \
           --region {{ aws_region }} \
-          --passphrase fileb://{{ acm_passphrase_file }} \
           --output json > /tmp/acm_get_certificate.json
       args:
         creates: /tmp/acm_get_certificate.json
@@ -96,14 +86,13 @@
         AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
         AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
         AWS_DEFAULT_REGION: "{{ aws_region }}"
-      register: export_result
-      failed_when: export_result.rc != 0
+      register: get_cert_result
+      failed_when: get_cert_result.rc != 0
 
-    - name: Parse exported certificate
+    - name: Parse ACM certificate
       set_fact:
         acm_certificate_body: "{{ lookup('file', '/tmp/acm_get_certificate.json') | from_json | json_query('Certificate') }}"
         acm_certificate_chain: "{{ lookup('file', '/tmp/acm_get_certificate.json') | from_json | json_query('CertificateChain') }}"
-        acm_private_key: "{{ lookup('file', '/tmp/acm_get_certificate.json') | from_json | json_query('PrivateKey') }}"
 
     - name: Write certificate file
       copy:
@@ -116,6 +105,12 @@
         content: "{{ acm_private_key }}"
         dest: "{{ ssl_key_dest }}"
         mode: '0600'
+
+    - name: Write certificate chain file
+      copy:
+        content: "{{ acm_certificate_chain }}"
+        dest: "{{ ssl_cert_dir }}/chain.pem"
+        mode: '0644'
 
     - name: Copy ACM SSL certificate
       copy:
