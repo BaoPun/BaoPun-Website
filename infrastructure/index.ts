@@ -94,6 +94,86 @@ const instance = instanceInfo.then(
     },
 }, { provider: awsProvider });*/
 
+// Get the certificate ARN from the ACM certificate lookup
+const certificateArn = certificate.then(cert => cert.arn);
+
+// Get the default subnet
+const defaultVpc    = aws.ec2.getVpc({ default: true }, { async: true });
+const defaultSubnet = defaultVpc.then(vpc =>
+  aws.ec2.getSubnets(
+    {
+      filters: [
+        {
+          name:   "vpc-id",
+          values: [vpc.id],
+        },
+      ],
+    },
+    { async: true },
+  ),
+);
+
+// Create an Application Load Balancer
+const alb = new aws.lb.LoadBalancer("web-alb", {
+    internal: false,
+    loadBalancerType: "application",
+    securityGroups: [webSg.id],
+    subnets: defaultSubnet.then(r => r.ids),
+    enableDeletionProtection: false,
+}, { provider: awsProvider });
+
+// Create a target group for the EC2 instance
+const targetGroup = new aws.lb.TargetGroup("web-tg", {
+    port: 80,
+    protocol: "HTTP",
+    targetType: "instance",
+    vpcId: defaultVpc.then(v => v.id),
+    healthCheck: {
+        path: "/",
+        protocol: "HTTP",
+    },
+}, { provider: awsProvider });
+
+// Attach the EC2 instance to the target group
+instance.then(inst =>
+    new aws.lb.TargetGroupAttachment("web-tg-attachment", {
+        targetGroupArn: targetGroup.arn,
+        targetId: inst.id,
+        port: 80,
+    }, { provider: awsProvider })
+);
+
+// Create a listener for HTTPS using the ACM certificate
+new aws.lb.Listener("web-https-listener", {
+    loadBalancerArn: alb.arn,
+    port: 443,
+    protocol: "HTTPS",
+    sslPolicy: "ELBSecurityPolicy-2016-08",
+    certificateArn: cert.then(c => c.arn),
+    defaultActions: [{
+        type: "forward",
+        targetGroupArn: targetGroup.arn,
+    }],
+}, { provider: awsProvider });
+
+// Optionally, redirect HTTP to HTTPS
+new aws.lb.Listener("web-http-listener", {
+    loadBalancerArn: alb.arn,
+    port: 80,
+    protocol: "HTTP",
+    defaultActions: [{
+        type: "redirect",
+        redirect: {
+            port: "443",
+            protocol: "HTTPS",
+            statusCode: "HTTP_301",
+        },
+    }],
+}, { provider: awsProvider });
+
+// Export the ALB DNS name
+export const albDns = alb.dnsName;
+
 export const publicIp = instance.then(i => i.publicIp);
 export const publicDns = instance.then(i => i.publicDns);
 export const keyName = keyPair.keyName;
