@@ -74,14 +74,10 @@
         group: root
         mode: '0755'
 
-    - name: Generate ACM passphrase and save to file
-      community.crypto.openssl_random:
-        length: 32
-        hex: false
-        base64: true
-        path: "{{ acm_passphrase_file }}"
-        mode: '0600'
-      when: acm_passphrase_file is defined
+    - name: Generate ACM passphrase file if not present
+      shell: "openssl rand -base64 32 > {{ acm_passphrase_file }}"
+      args:
+        creates: "{{ acm_passphrase_file }}"
 
     - name: Export ACM certificate (imported certificates only)
       shell: |
