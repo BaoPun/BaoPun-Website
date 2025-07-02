@@ -77,7 +77,7 @@
     - name: Export ACM certificate (imported certificates only)
       shell: |
         aws acm export-certificate \
-          --certificate-arn "{{ acm_certificate_arn }}" \
+          --certificate-arn "{{ aws_acm_certificate_arn }}" \
           --region {{ aws_region }} \
           --output json > /tmp/acm_export.json
       args:
