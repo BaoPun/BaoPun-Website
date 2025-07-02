@@ -149,7 +149,7 @@ new aws.lb.Listener("web-https-listener", {
     port: 443,
     protocol: "HTTPS",
     sslPolicy: "ELBSecurityPolicy-2016-08",
-    certificateArn: cert.then(c => c.arn),
+    certificateArn: certificate.then(c => c.arn),
     defaultActions: [{
         type: "forward",
         targetGroupArn: targetGroup.arn,
