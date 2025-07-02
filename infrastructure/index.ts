@@ -173,7 +173,6 @@ new aws.lb.Listener("web-http-listener", {
 
 // Export the ALB DNS name
 export const albDns = alb.dnsName;
-
 export const publicIp = instance.then(i => i.publicIp);
 export const publicDns = instance.then(i => i.publicDns);
 export const keyName = keyPair.keyName;

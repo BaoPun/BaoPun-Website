@@ -17,6 +17,10 @@
     nginx_conf_src: "templates/nginx.conf.j2"
     nginx_conf_dest: "/etc/nginx/nginx.conf"
 
+  vars_files:
+    - vars/secrets.yml
+    - vars/env.yml
+
   tasks:
     - name: Install required system packages
       yum:
@@ -69,6 +73,37 @@
         owner: root
         group: root
         mode: '0755'
+
+    - name: Export ACM certificate (imported certificates only)
+      shell: |
+        aws acm export-certificate \
+          --certificate-arn "{{ acm_certificate_arn }}" \
+          --region {{ aws_region }} \
+          --output json > /tmp/acm_export.json
+      args:
+        creates: /tmp/acm_export.json
+      env:
+        AWS_ACCESS_KEY_ID: "{{ aws_access_key_id }}"
+        AWS_SECRET_ACCESS_KEY: "{{ aws_secret_access_key }}"
+        AWS_DEFAULT_REGION: "{{ aws_region }}"
+
+    - name: Parse exported certificate
+      set_fact:
+        acm_certificate_body: "{{ lookup('file', '/tmp/acm_export.json') | from_json | json_query('Certificate') }}"
+        acm_certificate_chain: "{{ lookup('file', '/tmp/acm_export.json') | from_json | json_query('CertificateChain') }}"
+        acm_private_key: "{{ lookup('file', '/tmp/acm_export.json') | from_json | json_query('PrivateKey') }}"
+
+    - name: Write certificate file
+      copy:
+        content: "{{ acm_certificate_body }}"
+        dest: "{{ ssl_cert_dest }}"
+        mode: '0644'
+
+    - name: Write private key file
+      copy:
+        content: "{{ acm_private_key }}"
+        dest: "{{ ssl_key_dest }}"
+        mode: '0600'
 
     - name: Copy ACM SSL certificate
       copy:
