@@ -87,14 +87,15 @@
       register: get_cert_result
       failed_when: get_cert_result.rc != 0
 
-    - name: Debug ACM get-certificate result
-      debug:
-        var: get_cert_result
+    - name: Slurp ACM certificate JSON from remote host
+      slurp:
+        src: /tmp/acm_get_certificate.json
+      register: acm_cert_json
 
     - name: Parse ACM certificate
       set_fact:
-        acm_certificate_body: "{{ lookup('file', '/tmp/acm_get_certificate.json') | from_json | json_query('Certificate') }}"
-        acm_certificate_chain: "{{ lookup('file', '/tmp/acm_get_certificate.json') | from_json | json_query('CertificateChain') }}"
+        acm_certificate_body: "{{ (acm_cert_json.content | b64decode | from_json).Certificate }}"
+        acm_certificate_chain: "{{ (acm_cert_json.content | b64decode | from_json).CertificateChain }}"
 
     - name: Write certificate file
       copy:
