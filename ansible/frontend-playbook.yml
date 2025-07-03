@@ -73,7 +73,7 @@
         name: nginx
         state: present
 
-    - name: Configure Nginx for HTTP only (SSL handled by ALB)
+    - name: Configure Nginx for HTTP only
       template:
         src: "{{ nginx_conf_src }}"
         dest: "{{ nginx_conf_dest }}"
