@@ -54,6 +54,16 @@
         username: "{{ ghcr_username }}"
         password: "{{ ghcr_pat }}"
 
+    - name: Build and push frontend Docker image with latest tag
+      community.docker.docker_image:
+        name: "{{ frontend_image }}"
+        build:
+          path: "{{ playbook_dir }}/../"   # Adjust if your Dockerfile is elsewhere
+        tag: latest
+        push: yes
+        source: build
+      register: build_result
+
     - name: Pull frontend container image
       docker_image:
         name: "{{ frontend_image }}"
