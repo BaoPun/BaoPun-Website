@@ -42,11 +42,33 @@
         state: started
         enabled: yes
 
+    - name: Add ec2-user to Docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
     - name: Log in to GitHub Container Registry
       docker_login:
         registry_url: ghcr.io
         username: "{{ ghcr_username }}"
         password: "{{ ghcr_pat }}"
+
+    - name: Build frontend Docker image
+      community.docker.docker_image:
+        name: "{{ frontend_image }}"
+        build:
+          path: "{{ frontend_build_context }}"
+        push: yes
+        source: build
+        tag: latest
+      register: build_result
+      vars:
+        frontend_build_context: "{{ playbook_dir }}/../.."  # This points to the root directory
+
+    - name: Show build result
+      debug:
+        var: build_result
 
     - name: Pull frontend container image
       docker_image:
