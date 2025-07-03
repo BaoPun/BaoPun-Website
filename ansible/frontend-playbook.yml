@@ -89,8 +89,9 @@
         tag: latest
         force_source: yes
 
-    - name: Remove any running containers using port 3000
+    - name: Remove any running containers using port 80
       shell: |
+        docker ps --filter "publish=80" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
         docker ps --filter "publish=3000" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
       ignore_errors: yes
 
