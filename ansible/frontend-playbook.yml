@@ -104,3 +104,21 @@
         restart_policy: unless-stopped
         ports:
           - "{{ frontend_port }}:{{ frontend_port }}"
+
+    - name: Install Nginx
+      yum:
+        name: nginx
+        state: present
+
+    - name: Configure Nginx for HTTP only (SSL handled by ALB)
+      template:
+        src: "{{ nginx_conf_src }}"
+        dest: "{{ nginx_conf_dest }}"
+        mode: '0644'
+      notify: Restart Nginx
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
