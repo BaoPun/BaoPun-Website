@@ -8,7 +8,7 @@
     frontend_container_name: "baopun-website"
     frontend_env:
       NODE_ENV: "production"
-    frontend_port: 80
+    frontend_port: 3000
     nginx_conf_src: "templates/nginx_default.conf.j2"
     nginx_conf_dest: "/etc/nginx/nginx.conf"
 
