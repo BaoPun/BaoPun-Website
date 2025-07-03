@@ -8,6 +8,10 @@ const awsAccessKey = awsConfig.requireSecret("accessKey");
 const awsSecretKey = awsConfig.requireSecret("secretKey");
 const awsRegion: pulumi.Input<Region> = awsConfig.require("region") as pulumi.Input<Region>;
 
+// Configure other secrets
+const config = new pulumi.Config();
+const certificateArn = config.requireSecret("certificateArn");
+
 // Domain
 const domain = "www.baopunny.studio";
 
@@ -19,14 +23,14 @@ const awsProvider = new aws.Provider("aws", {
 });
 
 // Get certificate
-const certificate = aws.acm.getCertificate(
+/*const certificate = aws.acm.getCertificate(
   {
     domain,
     statuses: ["ISSUED"],      // ignore PENDING_VALIDATION / EXPIRED
     //mostSpecific: true,
   },
   { async: true }
-);
+);*/
 
 // Create a security group allowing HTTP, HTTPS, and SSH
 const webSg = new aws.ec2.SecurityGroup("web-sg",{
@@ -93,9 +97,6 @@ const instance = instanceInfo.then(
         Environment: "development",
     },
 }, { provider: awsProvider });*/
-
-// Get the certificate ARN from the ACM certificate lookup
-const certificateArn = certificate.then(cert => cert.arn);
 
 // Get the default subnet
 const defaultVpc    = aws.ec2.getVpc({ default: true }, { async: true });
