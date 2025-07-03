@@ -4,7 +4,7 @@
   become: yes
 
   vars:
-    frontend_image: "baopun-website:latest"
+    frontend_image: "ghcr.io/baopun/baopun-website:latest"
     frontend_container_name: "baopun-website"
     frontend_env:
       NODE_ENV: "production"
