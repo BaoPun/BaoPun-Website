@@ -9,7 +9,7 @@
     frontend_env:
       NODE_ENV: "production"
     frontend_port: 3000
-    nginx_conf_src: "templates/nginx_default.conf.j2"
+    nginx_conf_src: "templates/nginx.conf.j2"
     nginx_conf_dest: "/etc/nginx/nginx.conf"
 
   vars_files:
