@@ -22,16 +22,6 @@ const awsProvider = new aws.Provider("aws", {
     region: awsRegion
 });
 
-// Get certificate
-/*const certificate = aws.acm.getCertificate(
-  {
-    domain,
-    statuses: ["ISSUED"],      // ignore PENDING_VALIDATION / EXPIRED
-    //mostSpecific: true,
-  },
-  { async: true }
-);*/
-
 // Create a security group allowing HTTP, HTTPS, and SSH
 const webSg = new aws.ec2.SecurityGroup("web-sg",{
     description: "Allow HTTP, HTTPS, and SSH",
@@ -86,17 +76,6 @@ const instance = instanceInfo.then(
         },
     }, { provider: awsProvider })
 );
-
-/*new aws.ec2.Instance("web-server", {
-    instanceType: "t2.micro",
-    vpcSecurityGroupIds: [webSg.id],
-    ami: 'ami-011e15a70256b7f26',
-    keyName: keyPair.keyName, //Key pair is needed to SSH into the instance
-    tags: {
-        Name: "PulumiWebServer",
-        Environment: "development",
-    },
-}, { provider: awsProvider });*/
 
 // Get the default subnet
 const defaultVpc    = aws.ec2.getVpc({ default: true }, { async: true });

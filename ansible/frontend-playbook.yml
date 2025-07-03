@@ -8,7 +8,7 @@
     frontend_container_name: "baopun-website"
     frontend_env:
       NODE_ENV: "production"
-    frontend_port: 3000
+    frontend_port: 80
     nginx_conf_src: "templates/nginx.conf.j2"
     nginx_conf_dest: "/etc/nginx/nginx.conf"
 
@@ -82,10 +82,12 @@
         username: "{{ ghcr_username }}"
         password: "{{ ghcr_pat }}"
 
-    - name: Pull frontend container image
+    - name: Pull latest frontend container image
       docker_image:
         name: "{{ frontend_image }}"
         source: pull
+        tag: latest
+        force_source: yes
 
     - name: Remove any running containers using port 3000
       shell: |
