@@ -4,8 +4,8 @@
   become: yes
 
   vars:
-    frontend_image: "nginx:latest"
-    frontend_container_name: "frontend_app"
+    frontend_image: "baopun-website:latest"
+    frontend_container_name: "baopun-website"
     frontend_env:
       NODE_ENV: "production"
     frontend_port: 3000
