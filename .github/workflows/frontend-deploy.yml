@@ -46,11 +46,11 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/${REPO_LC}/baopun-website:latest .
+          docker build -t ghcr.io/baopun/baopun-website:latest .
 
       - name: Push Docker image
         run: |
-          docker push ghcr.io/${REPO_LC}/baopun-website:latest
+          docker push ghcr.io/baopun/baopun-website:latest
 
   pulumi:
     needs: build-and-push
