@@ -64,7 +64,7 @@
         tag: latest
       register: build_result
       vars:
-        frontend_build_context: "{{ playbook_dir }}/../.."  # This points to the root directory
+        frontend_build_context: "{{ playbook_dir }}/../"  # This points to the root directory
 
     - name: Show build result
       debug:
