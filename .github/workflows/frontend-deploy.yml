@@ -44,15 +44,13 @@ jobs:
         id: repo
         run: echo "REPO_LC=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Dockerfile
-          push: true
-          tags: |
-            ghcr.io/baopun/baopun-website:latest
-            ghcr.io/baopun/baopun-website:${{ github.sha }}
+      - name: Build Docker image
+        run: |
+          docker build -t ghcr.io/baopun/baopun-website:latest .
+
+      - name: Push Docker image
+        run: |
+          docker push ghcr.io/baopun/baopun-website:latest
 
   pulumi:
     needs: build-and-push
