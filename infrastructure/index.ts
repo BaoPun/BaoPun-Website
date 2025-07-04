@@ -151,6 +151,12 @@ new aws.lb.Listener("web-http-listener", {
     }],
 }, { provider: awsProvider });
 
+// And get elastic IP
+new aws.ec2.Eip("frontend-eip", {
+    instance: instance.then(i => i.id),
+    tags:     { Name: "speedscore-eip" },
+}, { provider: awsProvider });
+
 // Export the ALB DNS name
 export const albDns = alb.dnsName;
 /*export const publicIp = instance.then(i => i.publicIp);
