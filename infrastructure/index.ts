@@ -152,10 +152,14 @@ new aws.lb.Listener("web-http-listener", {
 }, { provider: awsProvider });
 
 // And get elastic IP
-new aws.ec2.Eip("frontend-eip", {
-    instance: instance.then(i => i.id),
-    tags:     { Name: "speedscore-eip" },
-}, { provider: awsProvider });
+instance.then(inst => {
+    new aws.ec2.Eip("frontend-eip", {
+        instance: inst.id,
+        tags: { Name: "speedscore-eip" },
+    }, { provider: awsProvider });
+});
+
+// ...existing code...
 
 // Export the ALB DNS name
 export const albDns = alb.dnsName;
