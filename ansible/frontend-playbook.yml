@@ -16,15 +16,8 @@
     - vars/env.yml
 
   tasks:
-    - name: Install required system packages
-      yum:
-        name:
-          - ca-certificates
-        state: present
-        update_cache: yes
-
     - name: Install Docker
-      yum:
+      dnf:
         name:
           - docker
         state: present
@@ -34,6 +27,12 @@
         url: "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-{{ ansible_system | lower }}-{{ ansible_architecture }}"
         dest: /usr/local/bin/docker-compose
         mode: '0755'
+
+    - name: Start & enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
 
     - name: Ensure Docker service is running
       service:
@@ -66,14 +65,6 @@
         state: directory
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
-
-    - name: Render environment file for the container
-      template:
-        src: templates/env.j2
-        dest: "{{ app_directory }}/.env"
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
-        mode: "0600"
 
     - name: Render environment file for the container
       template:
