@@ -93,6 +93,17 @@
         docker ps --filter "publish=3000" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
       ignore_errors: yes
 
+    - name: Install Nginx
+      dnf:
+        name: nginx
+        state: present
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
     # Write the main nginx.conf (global config)
     - name: Copy static nginx.conf
       copy:
