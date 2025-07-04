@@ -80,13 +80,6 @@
         username: "{{ ghcr_username }}"
         password: "{{ ghcr_pat }}"
 
-    - name: Pull latest frontend container image
-      docker_image:
-        name: "{{ frontend_image }}"
-        source: pull
-        tag: latest
-        force_source: yes
-
     - name: Remove any running containers using port 80 and 3000
       shell: |
         docker ps --filter "publish=80" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
@@ -119,6 +112,13 @@
         src: "{{ nginx_conf_src }}"     
         dest: "{{ nginx_conf_dest }}"   
         mode: '0644'
+
+    - name: Pull latest frontend container image
+      docker_image:
+        name: "{{ frontend_image }}"
+        source: pull
+        tag: latest
+        force_source: yes
 
     - name: Start frontend container
       docker_container:
