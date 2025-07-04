@@ -85,12 +85,6 @@
         name: nginx
         state: present
 
-    - name: Start and enable Nginx
-      service:
-        name: nginx
-        state: started
-        enabled: yes
-
     # Write the main nginx.conf (global config)
     - name: Copy static nginx.conf
       copy:
@@ -106,6 +100,12 @@
         src: "{{ nginx_conf_src }}"     
         dest: "{{ nginx_conf_dest }}"   
         mode: '0644'
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
 
     - name: Pull latest frontend container image
       docker_image:
