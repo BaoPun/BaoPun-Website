@@ -159,7 +159,32 @@ instance.then(inst => {
     }, { provider: awsProvider });
 });
 
-// ...existing code...
+/*// Helper to get EIP by instance tag (or however you identify it)
+const getEip = instanceId =>
+    aws.ec2.getElasticIp({
+        filters: [
+            { name: "instance-id", values: [instanceId] }
+        ]
+    }, { async: true, provider: awsProvider });
+
+// Attach or create EIP depending on instance existence
+instance.then(async inst => {
+    let eip;
+    try {
+        // Try to get existing EIP associated with this instance
+        eip = await getEip(inst.id);
+        pulumi.log.info(`Found existing EIP: ${eip.publicIp}`);
+    } catch (err) {
+        // If not found, create a new EIP
+        eip = new aws.ec2.Eip("baopun-website-eip", {
+            instance: inst.id,
+            tags: { Name: "baopun-website-eip" }
+        }, { provider: awsProvider });
+        pulumi.log.info(`Created new EIP for instance: ${inst.id}`);
+    }
+    return eip;
+});*/
+
 
 // Export the ALB DNS name
 export const albDns = alb.dnsName;
