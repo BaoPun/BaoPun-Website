@@ -8,7 +8,6 @@
     frontend_container_name: "baopun-website"
     frontend_env:
       NODE_ENV: "production"
-    frontend_port: 3000
     nginx_conf_src: "templates/nginx.conf.j2"
     nginx_conf_dest: "/etc/nginx/conf.d/default.conf"
 
@@ -76,6 +75,14 @@
         group: "{{ ansible_user }}"
         mode: "0600"
 
+    - name: Render environment file for the container
+      template:
+        src: templates/env.j2
+        dest: "{{ app_directory }}/.env"
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: "0600"
+
     - name: Log in to GitHub Container Registry
       docker_login:
         registry_url: ghcr.io
@@ -95,11 +102,6 @@
         docker ps --filter "publish=3000" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
       ignore_errors: yes
 
-    - name: Install Nginx
-      yum:
-        name: nginx
-        state: present
-
     # Write the main nginx.conf (global config)
     - name: Copy static nginx.conf
       copy:
@@ -115,7 +117,6 @@
         src: "{{ nginx_conf_src }}"     
         dest: "{{ nginx_conf_dest }}"   
         mode: '0644'
-      notify: Restart Nginx
 
     - name: Start frontend container
       docker_container:
@@ -125,12 +126,6 @@
         env_file: "{{ app_directory }}/.env"
         restart_policy: unless-stopped
         ports:
-          - "{{ frontend_port }}:{{ frontend_port }}"
-
-  handlers:
-  - name: Restart Nginx
-    service:
-      name: nginx
-      state: restarted
+          - "80:80"
 
     
