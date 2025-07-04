@@ -95,16 +95,6 @@
         docker ps --filter "publish=3000" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
       ignore_errors: yes
 
-    - name: Start frontend container
-      docker_container:
-        name: "{{ frontend_container_name }}"
-        image: "{{ frontend_image }}"
-        env: "{{ frontend_env }}"
-        env_file: "{{ app_directory }}/.env"
-        restart_policy: unless-stopped
-        ports:
-          - "{{ frontend_port }}:{{ frontend_port }}"
-
     - name: Install Nginx
       yum:
         name: nginx
@@ -125,3 +115,22 @@
         src: "{{ nginx_conf_src }}"     
         dest: "{{ nginx_conf_dest }}"   
         mode: '0644'
+      notify: Restart Nginx
+
+    - name: Start frontend container
+      docker_container:
+        name: "{{ frontend_container_name }}"
+        image: "{{ frontend_image }}"
+        env: "{{ frontend_env }}"
+        env_file: "{{ app_directory }}/.env"
+        restart_policy: unless-stopped
+        ports:
+          - "{{ frontend_port }}:{{ frontend_port }}"
+
+  handlers:
+  - name: Restart Nginx
+    service:
+      name: nginx
+      state: restarted
+
+    
