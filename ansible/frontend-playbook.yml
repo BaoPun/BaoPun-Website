@@ -118,7 +118,6 @@
       docker_container:
         name: "{{ frontend_container_name }}"
         image: "{{ frontend_image }}"
-        env: "{{ frontend_env }}"
         env_file: "{{ app_directory }}/.env"
         restart_policy: unless-stopped
         ports:
