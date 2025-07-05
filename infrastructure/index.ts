@@ -152,13 +152,6 @@ new aws.lb.Listener("web-http-listener", {
 }, { provider: awsProvider });
 
 // And get elastic IP
-/*instance.then(inst => {
-    new aws.ec2.Eip("frontend-eip", {
-        instance: inst.id,
-        tags: { Name: "baopun-website-eip" },
-    }, { provider: awsProvider });
-});*/
-
 // Helper to get EIP by instance tag (or however you identify it)
 /*const getEip = instance =>
     aws.ec2.getElasticIp({
