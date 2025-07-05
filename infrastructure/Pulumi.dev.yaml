@@ -4,7 +4,5 @@ config:
   aws:accessKey:
     secure: AAABAMAt8cY/J3ILovPUACUjKOQvQ5BnIFs9tBtUgHdblu8P+j29pxjNkSY2M5WTAX/TiA==
   aws:region: us-west-2
-  BaoPun-Website:certificationArn:
-    secure: AAABAL0WwgbbcUB+pSCqSEdopKfG6J60EQvD+OCIGic6XrIX/tzb8582xKEmlzQsUo+ckyg1dv6uhB8+f3AQCT+ulSaqqI3jh7NPUi0raAeW8aNvygC/bflBwq5LhCQVQIn2opQ85km6lN3OBED7Y5PrCQ==
   BaoPun-Website:certificateArn:
     secure: AAABAJqD8QkGGT0Bw2sqTBcVZ2Pgr53V1NzsQYx5cFoXLuu7lGi9H0+wwHKaZ9pb7OkCLtJ2worwXYqBWjhvyH9x9AJ34KygY8n3f68xp4jOuJP/tGjEFGqcWWve5vLtAlZrFh2rU9fG5nTkpBNP/6kodw==
