@@ -8,8 +8,9 @@
 
 # Production stage with Nginx
   FROM nginx:alpine
-  COPY --from=builder /app/build /usr/share/nginx/html/
+  WORKDIR /app
   RUN ls /app/build
+  COPY --from=builder /app/build /usr/share/nginx/html/
   #COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
   COPY nginx/nginx.conf /etc/nginx/nginx.conf
   COPY ansible/templates/nginx.conf.j2 /etc/nginx/conf.d/default.conf
