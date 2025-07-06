@@ -91,7 +91,7 @@ jobs:
   ansible:
     needs: pulumi
     runs-on: ubuntu-latest
-    env:
+    #env:
       
     steps:
       - name: Checkout code
