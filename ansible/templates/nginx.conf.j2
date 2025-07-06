@@ -1,6 +1,6 @@
 server {
     listen 80;
-    root {{ app_directory }}/build;
+    root /usr/share/nginx/html;
     server_name "{{ domain }}";
 
     location / {
