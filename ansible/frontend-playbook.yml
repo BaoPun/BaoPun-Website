@@ -1,5 +1,5 @@
 ---
-- name: Deploy Frontend Application with Docker and Nginx (SSL at ALB)
+- name: Deploy Frontend Application with Docker and Nginx
   hosts: baopun-website
   become: yes
 
@@ -18,17 +18,10 @@
   tasks:
     - name: Install Docker
       dnf:
-        name:
-          - docker
+        name: docker
         state: present
 
     - name: Start & enable Docker service
-      service:
-        name: docker
-        state: started
-        enabled: yes
-
-    - name: Ensure Docker service is running
       service:
         name: docker
         state: started
