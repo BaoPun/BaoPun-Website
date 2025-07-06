@@ -76,6 +76,7 @@
       git:
         repo: "https://{{ git_repo }}"
         dest: "{{ app_directory }}"
+      ignore_errors: yes
 
     - name: Pull latest frontend container image
       docker_image:
