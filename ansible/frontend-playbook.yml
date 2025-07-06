@@ -33,19 +33,11 @@
         state: started
         enabled: yes
 
-    
-
     - name: Stop host Nginx (if running)
       service:
         name: nginx
         state: stopped
         enabled: no
-      ignore_errors: yes
-
-    - name: Remove host Nginx package
-      dnf:
-        name: nginx
-        state: absent
       ignore_errors: yes
 
     - name: Ensure application directory exists
@@ -89,12 +81,7 @@
         env_file: "{{ app_directory }}/.env"
         restart_policy: unless-stopped
         ports:
-          - "3000:3000"
-
-    - name: Install Nginx
-      dnf:
-        name: nginx
-        state: present
+          - "80:80"
 
     - name: Start and enable Nginx
       service:
