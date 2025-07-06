@@ -79,6 +79,10 @@
         dest: "{{ app_directory }}"
       ignore_errors: yes
 
+    - name: Install dependencies from cloned repo's packages
+      community.general.npm:
+        path: "{{ app_directory }}"
+
     - name: Pull latest frontend container image
       docker_image:
         name: "{{ frontend_image }}"
