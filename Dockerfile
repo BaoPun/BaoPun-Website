@@ -1,6 +1,6 @@
 # Build stage
   FROM node:18-alpine AS builder
-  WORKDIR /app
+  #WORKDIR /app
   COPY package*.json ./
   RUN npm install
   COPY . .
@@ -8,7 +8,7 @@
   
   # Production stage with Nginx
   FROM nginx:alpine
-  COPY --from=builder /app/build /usr/share/nginx/html
+  COPY --from=builder /build /usr/share/nginx/html
   COPY nginx/nginx.conf /etc/nginx/nginx.conf
   COPY ansible/templates/nginx.conf.j2 /etc/nginx/conf.d/default.conf
   EXPOSE 80
