@@ -40,17 +40,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set lowercased repository variable
-        id: repo
-        run: echo "REPO_LC=${GITHUB_REPOSITORY,,}" >> $GITHUB_ENV
-
-      - name: Build Docker image
-        run: |
-          docker build -t ghcr.io/baopun/baopun-website:latest .
-
-      - name: Push Docker image
-        run: |
-          docker push ghcr.io/baopun/baopun-website:latest
+      - name: Build and Push Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ghcr.io/baopun/baopun-website:latest
+            ghcr.io/baopun/baopun-website:${{ github.sha }}
 
   pulumi:
     needs: build-and-push
