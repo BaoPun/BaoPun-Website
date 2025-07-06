@@ -78,6 +78,22 @@
         name: nginx
         state: present
 
+    # Write the main nginx.conf (global config)
+    - name: Copy static nginx.conf
+      copy:
+        src: ../nginx/nginx.conf           
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    # Write the templated server block to conf.d
+    - name: Configure Nginx server block
+      template:
+        src: "{{ nginx_conf_src }}"     
+        dest: "{{ nginx_conf_dest }}"   
+        mode: '0644'
+
     - name: Start and enable Nginx
       service:
         name: nginx
