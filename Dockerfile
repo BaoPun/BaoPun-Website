@@ -5,11 +5,12 @@
   RUN npm install
   COPY . .
   RUN npm run build
-  COPY build/* .
+  COPY . .
   
   # Production stage with Nginx
   FROM nginx:alpine
-  COPY --from=builder /app/build /usr/share/nginx/html
+  WORKDIR /app
+  COPY --from=builder /app /usr/share/nginx/html
   COPY nginx/nginx.conf /etc/nginx/nginx.conf
   COPY ansible/templates/nginx.conf.j2 /etc/nginx/conf.d/default.conf
   EXPOSE 80
