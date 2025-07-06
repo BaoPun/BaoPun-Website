@@ -16,9 +16,11 @@
     - vars/env.yml
 
   tasks:
-    - name: Install Docker
+    - name: Install Docker and other dependencies
       dnf:
-        name: docker
+        name: 
+          - docker
+          - git
         state: present
 
     - name: Add ec2-user to Docker group
@@ -40,33 +42,41 @@
         enabled: no
       ignore_errors: yes
 
+    - name: Remove host Nginx package
+      dnf:
+        name: nginx
+        state: absent
+      ignore_errors: yes
+
+    - name: Install Nginx
+      dnf:
+        name: nginx
+        state: present
+
     - name: Ensure application directory exists
       file:
         path: "{{ app_directory }}"
         state: directory
         owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
-
-    - name: Render environment file for the container
-      template:
-        src: templates/env.j2
-        dest: "{{ app_directory }}/.env"
-        owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}"
-        mode: "0600"
-
-    - name: Log in to GitHub Container Registry
-      docker_login:
-        registry_url: ghcr.io
-        username: "{{ ghcr_username }}"
-        password: "{{ ghcr_pat }}"
+        group: "{{ ansible_user }}" 
 
     - name: Remove any running containers using port 80 and 3000
       shell: |
         docker ps --filter "publish=80" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
         docker ps --filter "publish=3000" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
       ignore_errors: yes
+
+    - name: Log in to GitHub Container Registry
+      docker_login:
+        registry_url: ghcr.io
+        username: "{{ ghcr_username }}"
+        password: "{{ ghcr_pat }}"
         
+    - name: Clone git repo
+      git:
+        repo: "https://{{ git_repo }}"
+        dest: "{{ app_directory }}"
+
     - name: Pull latest frontend container image
       docker_image:
         name: "{{ frontend_image }}"
@@ -81,12 +91,14 @@
         env_file: "{{ app_directory }}/.env"
         restart_policy: unless-stopped
         ports:
-          - "80:80"
+          - "3000:3000"
 
     - name: Start and enable Nginx
       service:
         name: nginx
         state: started
         enabled: yes
+
+    
 
     
