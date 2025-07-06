@@ -1,15 +1,15 @@
 # Build stage
   FROM node:latest AS builder
-  WORKDIR /opt/baopun-website/frontend
+  WORKDIR /app
   COPY package*.json .
   RUN npm install
   COPY . .
   RUN npm run build
+  RUN ls /app/build
 
 # Production stage with Nginx
   FROM nginx:alpine
-  RUN rm -rf /etc/nginx/nginx.conf*
-  COPY --from=builder /opt/baopun-website/frontend/build /usr/share/nginx/html/
+  COPY --from=builder /app/build /usr/share/nginx/html/
   #COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
   COPY nginx/nginx.conf /etc/nginx/nginx.conf
   COPY ansible/templates/nginx.conf.j2 /etc/nginx/conf.d/default.conf
