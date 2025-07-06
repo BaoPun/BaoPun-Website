@@ -5,7 +5,7 @@
   RUN npm install
   COPY . .
   RUN npm run build
-  COPY ./build/ .
+  COPY build/* .
   
   # Production stage with Nginx
   FROM nginx:alpine
