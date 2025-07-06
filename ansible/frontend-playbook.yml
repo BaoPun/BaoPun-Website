@@ -21,6 +21,7 @@
         name: 
           - docker
           - git
+          - nodejs
         state: present
 
     - name: Add ec2-user to Docker group
