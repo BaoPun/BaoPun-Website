@@ -1,5 +1,13 @@
 import styles from '../Styles/style.module.css';
 import { Link } from 'react-router';
+import type { Route } from "./+types/home";
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "404 Not Found" },
+    { name: "description", content: "Not Found" },
+  ];
+}
 
 export default function NotFoundPage(){
     return (
