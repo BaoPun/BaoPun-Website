@@ -67,6 +67,20 @@
         docker ps --filter "publish=3000" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
       ignore_errors: yes
 
+    - name: Copy static nginx.conf
+      copy:
+        src: ../nginx/nginx.conf           
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Configure Nginx server block
+      template:
+        src: "{{ nginx_conf_src }}"     
+        dest: "{{ nginx_conf_dest }}"   
+        mode: '0644'
+
     - name: Log in to GitHub Container Registry
       docker_login:
         registry_url: ghcr.io
