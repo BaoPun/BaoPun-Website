@@ -86,8 +86,15 @@
         registry_url: ghcr.io
         username: "{{ ghcr_username }}"
         password: "{{ ghcr_pat }}"
+
+    - name: Remove everything from app directory before cloning
+      ansible.builtin.file:
+        path: {{ app_directory }}
+        become: yes
+        state: absent
+      ignore_errors: yes
         
-    - name: Clone git repo
+    - name: Clone git repo inside app directory
       git:
         repo: "https://{{ git_repo }}"
         dest: "{{ app_directory }}"
