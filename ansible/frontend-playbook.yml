@@ -89,7 +89,7 @@
 
     - name: Remove everything from app directory before cloning
       ansible.builtin.file:
-        path: {{ app_directory }}
+        path: "{{ app_directory }}""
         become: yes
         state: absent
       ignore_errors: yes
