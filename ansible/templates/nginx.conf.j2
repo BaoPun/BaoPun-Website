@@ -1,5 +1,6 @@
 server {
     listen 80;
+    listen [::]:80;
     root {{ app_directory }}/build;
     server_name "{{ domain }}";
 
