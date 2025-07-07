@@ -1,9 +1,7 @@
 server {
     listen 80;
     listen [::]:80;
-    root {{ app_directory }};
     server_name "{{ domain }}";
-    index index.html;
 
     location / {
         proxy_pass http://localhost:3000;
@@ -14,7 +12,27 @@ server {
         try_files $uri $uri/ /index.html = 404;
     }
 
+    location /Projects {
+        proxy_pass http://localhost:3000/Projects;
+    }
+    
+    location /AboutMe {
+        proxy_pass http://localhost:3000/About;
+    }
+
     location /MarioKart {
         proxy_pass http://localhost:3000/MarioKart;
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+    }
+
+    location /ScoreTracker {
+        proxy_pass http://localhost:3000/ScoreTracker
+        proxy_set_header Host              $host;
+        proxy_set_header X-Real-IP         $remote_addr;
+        proxy_set_header X-Forwarded-For   $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
     }
 }
