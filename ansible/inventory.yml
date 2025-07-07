@@ -1,0 +1,5 @@
+all:
+  hosts:
+    baopun-website:
+      ansible_host: 34.217.23.243
+      ansible_user: ec2-user

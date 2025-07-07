@@ -1,0 +1,129 @@
+---
+- name: Deploy Frontend Application with Docker and Nginx
+  hosts: baopun-website
+  become: yes
+
+  vars:
+    frontend_image: "ghcr.io/baopun/baopun-website:latest"
+    frontend_container_name: "baopun-website"
+    frontend_env:
+      NODE_ENV: "production"
+    nginx_conf_src: "templates/nginx.conf.j2"
+    nginx_conf_dest: "/etc/nginx/conf.d/default.conf"
+
+  vars_files:
+    - vars/secrets.yml
+    - vars/env.yml
+
+  tasks:
+    - name: Install Docker and other dependencies
+      dnf:
+        name: 
+          - docker
+          - git
+          - nodejs
+        state: present
+
+    - name: Add ec2-user to Docker group
+      user:
+        name: "{{ ansible_user }}"
+        groups: docker
+        append: yes
+
+    - name: Start & enable Docker service
+      service:
+        name: docker
+        state: started
+        enabled: yes
+
+    - name: Stop host Nginx (if running)
+      service:
+        name: nginx
+        state: stopped
+        enabled: no
+      ignore_errors: yes
+
+    - name: Remove host Nginx package
+      dnf:
+        name: nginx
+        state: absent
+      ignore_errors: yes
+
+    - name: Install Nginx
+      dnf:
+        name: nginx
+        state: present
+
+    - name: Ensure application directory exists
+      file:
+        path: "{{ app_directory }}"
+        state: directory
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}" 
+
+    - name: Remove any running containers using port 80 and 3000
+      shell: |
+        docker ps --filter "publish=80" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
+        docker ps --filter "publish=3000" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
+      ignore_errors: yes
+
+    - name: Copy static nginx.conf
+      copy:
+        src: ../nginx/nginx.conf           
+        dest: /etc/nginx/nginx.conf
+        owner: root
+        group: root
+        mode: '0644'
+
+    - name: Configure Nginx server block
+      template:
+        src: "{{ nginx_conf_src }}"     
+        dest: "{{ nginx_conf_dest }}"   
+        mode: '0644'
+
+    - name: Log in to GitHub Container Registry
+      docker_login:
+        registry_url: ghcr.io
+        username: "{{ ghcr_username }}"
+        password: "{{ ghcr_pat }}"
+
+    - name: Remove everything from app directory before cloning
+      ansible.builtin.file:
+        path: "{{ app_directory }}"
+      ignore_errors: yes
+        
+    - name: Clone git repo inside app directory
+      git:
+        repo: "https://{{ git_repo }}"
+        dest: "{{ app_directory }}"
+      ignore_errors: yes
+
+    - name: Install dependencies from cloned repo's packages
+      community.general.npm:
+        path: "{{ app_directory }}"
+
+    - name: Pull latest frontend container image
+      docker_image:
+        name: "{{ frontend_image }}"
+        source: pull
+        tag: latest
+        force_source: yes
+
+    - name: Start frontend container
+      docker_container:
+        name: "{{ frontend_container_name }}"
+        image: "{{ frontend_image }}"
+        #env_file: "{{ app_directory }}/.env"
+        restart_policy: unless-stopped
+        ports:
+          - "3000:3000"
+
+    - name: Start and enable Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    
+
+    

@@ -1,18 +1,124 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [push]
+name: Frontend Deploy
+
+on:
+  push:
+    branches:
+      - deployment
+      - main
+
 jobs:
-  Explore-GitHub-Actions:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-      - name: Check out repository code
+      - name: Checkout code
         uses: actions/checkout@v4
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Dockerfile
+          push: true
+          tags: |
+            ghcr.io/baopun/baopun-website:latest
+            ghcr.io/baopun/baopun-website:${{ github.sha }}
+
+  pulumi:
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    env:
+      PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Pulumi CLI
+        uses: pulumi/actions@v5
+
+      - name: Install dependencies
+        run: npm ci
+        working-directory: infrastructure
+
+      - name: Create or select Pulumi stack
+        run: pulumi stack select BaoPun-org/BaoPun-Website/dev || pulumi stack init BaoPun-org/BaoPun-Website/dev
+        working-directory: infrastructure
+
+      - name: Pulumi up
+        id: pulumi
+        uses: pulumi/actions@v4
+        with:
+          command: up
+          stack-name: BaoPun-org/BaoPun-Website/dev
+          work-dir: infrastructure
+        env:
+          PULUMI_ACCESS_TOKEN: ${{ secrets.PULUMI_ACCESS_TOKEN }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+
+  ansible:
+    needs: pulumi
+    runs-on: ubuntu-latest
+    #env:
+      
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Ansible
+        run: pip install ansible
+
+      - name: Set up SSH key
         run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+          mkdir -p ~/.ssh
+          printf "%s" "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/baopun-website-key.pem
+          chmod 600 ~/.ssh/baopun-website-key.pem
+          ssh-keyscan -H ${{ secrets.EC2_IP }} >> ~/.ssh/known_hosts 2>/dev/null || true
+
+      - name: Run Ansible Playbook
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: 'False'
+        run: |
+          cd ansible
+          chmod 600 ~/.ssh/baopun-website-key.pem
+          echo "${{ secrets.ANSIBLE_VAULT_PASSWORD }}" > ~/.vault-password
+          chmod 600 ~/.vault-password
+          ansible-playbook -i inventory.yml frontend-playbook.yml --private-key ~/.ssh/baopun-website-key.pem --vault-password-file ~/.vault-password

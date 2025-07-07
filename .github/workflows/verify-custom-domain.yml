@@ -1,0 +1,35 @@
+name: Verify Custom Domain and SSL Certificates
+
+on:
+  workflow_dispatch:
+  # schedule:
+  #  - cron: '0 2 * * *' # Runs daily at 2 AM UTC
+  push:
+    branches:
+      - deployment
+
+jobs:
+  verify-domain-ssl:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up AWS CLI
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }} 
+
+      - name: Verify ACM Certificate on www.baopunny.studio
+        run: |
+          DOMAIN="www.baopunny.studio"
+          ARN=$(aws acm list-certificates --query "CertificateSummaryList[?DomainName=='$DOMAIN'].CertificateArn" --output text)
+          if [ -z "$ARN" ]; then
+            echo "No ACM certificate found for $DOMAIN"
+            exit 1
+          fi
+          STATUS=$(aws acm describe-certificate --certificate-arn "$ARN" --query "Certificate.Status" --output text)
+          if [ "$STATUS" != "ISSUED" ]; then
+            echo "Certificate for $DOMAIN is not issued (status: $STATUS)"
+            exit 1
+          fi
+          echo "Certificate for $DOMAIN is ISSUED and ready to use!"
