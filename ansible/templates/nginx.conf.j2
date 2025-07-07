@@ -3,6 +3,7 @@ server {
     listen [::]:80;
     root {{ app_directory }}/app;
     server_name "{{ domain }}";
+    index index.html;
 
     location / {
         proxy_pass http://localhost:3000;
