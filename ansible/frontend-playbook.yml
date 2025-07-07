@@ -59,13 +59,22 @@
         path: "{{ app_directory }}"
         state: directory
         owner: "{{ ansible_user }}"
-        group: "{{ ansible_user }}" 
+        group: "{{ ansible_user }}"
 
     - name: Remove any running containers using port 80 and 3000
       shell: |
         docker ps --filter "publish=80" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
         docker ps --filter "publish=3000" --format "{{'{{'}}.ID{{'}}'}}" | xargs -r docker rm -f
-      ignore_errors: yes
+      ignore_errors: yes 
+
+    - name: Prune unused Docker containers, images, networks.
+      community.docker.docker_prune:
+        containers: true
+        images: true
+        images_filters:
+          dangling: false
+        networks: true 
+        builder_cache: true
 
     - name: Copy static nginx.conf
       copy:
@@ -113,7 +122,6 @@
       docker_container:
         name: "{{ frontend_container_name }}"
         image: "{{ frontend_image }}"
-        #env_file: "{{ app_directory }}/.env"
         restart_policy: unless-stopped
         ports:
           - "3000:3000"
