@@ -11,7 +11,7 @@
 #Production stage with Nginx
   FROM nginx:alpine
   WORKDIR /app
-  COPY --from=builder /app/build /usr/share/nginx/html/
+  #COPY --from=builder /app/build /usr/share/nginx/html/
   #COPY ./nginx/nginx.conf /etc/nginx/conf.d/default.conf
   COPY --from=builder /app/build /opt/baopun-website/frontend
   #COPY nginx/nginx.conf /etc/nginx/nginx.conf
