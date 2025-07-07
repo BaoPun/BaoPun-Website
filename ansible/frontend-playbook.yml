@@ -63,10 +63,12 @@
 
     - name: Prune unused Docker containers
       community.docker.docker_prune:
-        system_prune: true
         containers: true
         images: true
+        images_filters:
+          dangling: false
         networks: true 
+        builder_cache: true
       ignore_errors: yes
 
     - name: Remove any running containers using port 80 and 3000
