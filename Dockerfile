@@ -5,9 +5,7 @@
   RUN npm install
   COPY . .
   RUN npm run build
-
   EXPOSE 80 443
-
   CMD ["npm", "start"]
 
 # Production stage with Nginx
