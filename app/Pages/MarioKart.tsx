@@ -96,6 +96,15 @@ export default function MarioKartPage(){
             {/* Format selector page component */}
             <FormatSelectorPage />
 
+            {/* Creating side bar content, which will be styled with css content later */}
+            <div id={styles['left-side-nav']}>
+                <ol>
+                    <li><Link to="/Projects">Projects</Link></li>
+                    <li><Link to="/About">About Me</Link></li>
+                    <li><Link to="/MarioKart">Mario Kart</Link></li>
+                </ol>
+            </div>
+
         </div>
     );
 }
