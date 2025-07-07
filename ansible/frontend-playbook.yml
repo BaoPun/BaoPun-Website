@@ -90,7 +90,6 @@
     - name: Remove everything from app directory before cloning
       ansible.builtin.file:
         path: "{{ app_directory }}"
-        become: yes
       ignore_errors: yes
         
     - name: Clone git repo inside app directory
