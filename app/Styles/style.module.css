@@ -278,15 +278,13 @@ a.secondary {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
-  gap: 2%;
+  gap: 0.25%;
 }
 
 .formatButton{
   text-align: center;
-  padding: 40px;
+  padding: 35px;
   background-color: #f38755;
-  left: 0;
 }
 
 /* ScoreTracker.js styling */
