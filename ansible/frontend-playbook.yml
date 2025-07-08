@@ -8,8 +8,8 @@
     frontend_container_name: "baopun-website"
     frontend_env:
       NODE_ENV: "production"
-    nginx_conf_src: "templates/nginx.conf.j2"
-    nginx_conf_dest: "/etc/nginx/conf.d/default.conf"
+    nginx_conf_src: "templates/"
+    nginx_conf_dest: "/etc/nginx/conf.d/"
 
   vars_files:
     - vars/secrets.yml
@@ -22,6 +22,8 @@
           - docker
           - git
           - nodejs
+          - certbot
+          - python3-certbot-nginx
         state: present
 
     - name: Add ec2-user to Docker group
@@ -84,10 +86,17 @@
         group: root
         mode: '0644'
 
-    - name: Configure Nginx server block
+    - name: Add HTTP Nginx server block
       template:
-        src: "{{ nginx_conf_src }}"     
-        dest: "{{ nginx_conf_dest }}"   
+        src: "{{ nginx_conf_src }}/nginx.conf.j2"     
+        dest: "{{ nginx_conf_dest }}/default.conf"   
+        mode: '0644'
+
+    # New: add https and ssh config
+    - name: Add https Nginx server block
+      template: 
+        src: "{{ nginx_conf_src }}/nginx_https.conf.j2"
+        dest: "{{ nginx_conf_dest }}/nginx_https.conf"
         mode: '0644'
 
     - name: Log in to GitHub Container Registry
@@ -131,6 +140,26 @@
         name: nginx
         state: started
         enabled: yes
+    
+    # New: add task to generate certificate using certbot
+    - name: Create SSL certificate for HTTPS
+      shell: |
+        certbot --nginx \
+        --non-interactive \
+        --agree-tos \
+        --email bao.phungus.26@gmail.com \
+        -d {{ domain }} \
+        --force-renewal --redirect
+      args:
+        creates: /etc/letsencrypt/live/{{ domain }}
+
+    # New: give permission to created directory
+    - name: Allow permission for newly created SSL certificate directory
+      ansible.builtin.file:
+        path: /etc/letsencrypt/live/
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: "0755"
 
     
 
