@@ -185,9 +185,9 @@ a.secondary {
 
 #left-side-nav{
   height: 100%;
-  width: 10%;
+  width: 5%;
   background-color: #111;
-  position: absolute;
+  position: fixed;
   top: 0%;
 
 }
@@ -228,7 +228,6 @@ a.secondary {
 /* About.js styling */
 .aboutContainer{
   background-color: black;
-  display: inline-block;
 }
 
 .aboutDescription h1{
