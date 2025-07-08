@@ -1,87 +1,36 @@
-# Welcome to React Router!
+# Source Code for Bao Phung's website
+This repository contains all the source code for my website.  [Click here](https://www.baopunny.studio) to view the website.
 
-A modern, production-ready template for building full-stack React applications using React Router.
+# Website Initial Features
+- Initial home page and Mario Kart pages are set up.
+- About Me and Projects pages are not set up yet.  Clicking on them will redirect to a 404 page.
+- Score Tracker page within Mario Kart page is set up via clicking on 6 possible formats.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+# Website Upcoming Features
+- About Me and Projects pages to be implemented
+- In Score Tracker page, implement feature to copy current team standings after inputting all teams
+- Mobile support for competitive Mario Kart score tracking
 
-## Features
+# Website Updates (will chronologically update with added features)
+- Deployed website to https://www.baopunny.studio with SSL certificate for HTTPS support.
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+# Deployment Details
+### Frameworks
+The framework used for this website was **React Router.**  The main advantage of React is that we can build parts of a website as "components", which can be combined together to form dynamic websites. 
 
-## Getting Started
+### Testing
+**Vitest** was the framework of choice.  While **Jest** was considered, **Vitest's** ease of setup and built-in support for React made it the preferred option.  Testing follows the DAMP (descriptive and meaningful phrases) principle using testing suites organized in a Feature-First scheme. 
 
-### Installation
+### Containerization
+**Docker** was used to containerize the React application.  Within the container, we install dependencies specified within package.json, build the project, and then run the application.  This way, the container contains a running instance of the application, which is eventually passed to the Ansible playbook to be run within the EC2 instance.
 
-Install the dependencies:
+### Infrastructure
+To automate the setup of creating an AWS EC2 instance with AWS credentials, security groups, key pairs, subnets, a load balancer, and http/https listeners, **Pulumi** was used as an "infrastructure as code", or IaC for short.  The main benefit of Pulumi is that we can automate the infrastructure using a programming of our choice, which is something **Terraform** does not provide.  
 
-```bash
-npm install
-```
+### Configuration
+After provisioning the infrastructure with Pulumi, we then run an **Ansible** playbook that will automate the remaining processes within the EC2 instance that was provisioned in the previous step.  Ansible will be responsible for installing Docker and running the Docker container within the EC2 instance, restarting **Nginx** - a web server that supports reverse proxying - and copying configuration files to EC2 instance, cloning the source code onto the EC2 instance, and setting up SSL certificates to secure the custom domain.  
 
-### Development
+### CI/CD
+Due to **Github Actions** being naturally integrated within GitHub's platform, it was the clear choice for performing CI/CD workflows.  You can find the yaml files under .github/workflows.  
+All of the workflows are triggered by any changes to the main branch, as well as the individual branches of each feature (at this time, this is applicable for deployment and httpsConfiguration branches).  
 
-Start the development server with HMR:
-
-```bash
-npm run dev
-```
-
-Your application will be available at `http://localhost:5173`.
-
-## Building for Production
-
-Create a production build:
-
-```bash
-npm run build
-```
-
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
-
-```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
-```
-
-The containerized application can be deployed to any platform that supports Docker, including:
-
-- AWS ECS
-- Google Cloud Run
-- Azure Container Apps
-- Digital Ocean App Platform
-- Fly.io
-- Railway
-
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-```
-├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
-```
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
-
----
-
-Built with ❤️ using React Router.
