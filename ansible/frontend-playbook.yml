@@ -136,7 +136,7 @@
     # New: add task to generate certificate using certbot
     - name: Create SSL certificate for HTTPS
       shell: |
-        certbot renew --nginx \
+        certbot --nginx \
         --non-interactive \
         --agree-tos \
         --email bao.phungus.26@gmail.com \
