@@ -310,7 +310,7 @@ export default function ScoreTrackerPage(){
 
             <div id={styles.scoreTrackerContent}>
                 <p>This is a page about the score tracker for the {format}v{format} format.</p>
-                <p><Link to="/MarioKart">Click Here</Link> to return to the Mario Kart page.</p>
+                <p><Link to="/MarioKart" style={{'color': 'cyan', 'fontSize': '20px'}}>Click Here</Link> to return to the Mario Kart page.</p>
 
                 {/* Dynamically display added teams and their current scores */}
                 <div className={styles.scoreTrackerTeamsContainer}>

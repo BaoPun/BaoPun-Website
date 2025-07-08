@@ -1,5 +1,6 @@
 import styles from '../Styles/style.module.css';
 import { Link } from 'react-router';
+import Navigation  from '../Components/Navigation';
 import { useNavigate } from 'react-router';
 
 import type { Route } from "./+types/home";
@@ -62,7 +63,7 @@ export default function MarioKartPage(){
         <div className={styles.marioKartContainer}>
             {/* Add title at the top  */}
             <div className={styles.title}>
-                <h1 id={styles.marioKartTitle}>Mario Kart</h1>
+                <h1 id={styles.aboutTitle}>Mario Kart</h1>
                 <p><Link to="/" style={{'color': 'cyan', 'fontSize': '20px'}}>Click Here</Link> to return to the home page.</p><br/>
             </div>
 
@@ -97,13 +98,7 @@ export default function MarioKartPage(){
             <FormatSelectorPage />
 
             {/* Creating side bar content, which will be styled with css content later */}
-            <div id={styles['left-side-nav']}>
-                <ol>
-                    <li><Link to="/Projects">Projects</Link></li>
-                    <li><Link to="/About">About Me</Link></li>
-                    <li><Link to="/MarioKart">Mario Kart</Link></li>
-                </ol>
-            </div>
+            <Navigation />
 
         </div>
     );

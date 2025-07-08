@@ -185,10 +185,11 @@ a.secondary {
 
 #left-side-nav{
   height: 100%;
-  width: 9%;
+  width: 5%;
   background-color: #111;
-  top: 20%;
   position: fixed;
+  top: 0%;
+
 }
 
 #left-side-nav li{
@@ -224,6 +225,29 @@ a.secondary {
   padding: 5px 4px 10px;
 }
 
+/* About.js styling */
+.aboutContainer{
+  background-color: black;
+}
+
+.aboutDescription h1{
+  text-align: center;
+  font-size: 28px
+}
+
+.aboutDescription p{
+  text-align: center;
+}
+
+.aboutCareer h1{
+  text-align: center;
+  font-size: 28px
+}
+
+.aboutCareer p{
+  text-align: center;
+}
+
 /* MarioKart.js styling */
 .marioKartContainer{
   background-color: black;
@@ -238,7 +262,7 @@ a.secondary {
   font-size: 20px;
 }
 
-#marioKartTitle{
+#marioKartTitle, #aboutTitle{
   color: white;
   font-size: 30px;
 }
@@ -254,15 +278,13 @@ a.secondary {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
-  gap: 2%;
+  gap: 0.25%;
 }
 
 .formatButton{
   text-align: center;
-  padding: 40px;
+  padding: 35px;
   background-color: #f38755;
-  left: 0;
 }
 
 /* ScoreTracker.js styling */
