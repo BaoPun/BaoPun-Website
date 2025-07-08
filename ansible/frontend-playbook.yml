@@ -146,6 +146,14 @@
       args:
         creates: /etc/letsencrypt/live/{{ domain }}
 
+    # New: give permission to created directory
+    - name: Allow permission for newly created SSL certificate directory
+      ansible.builtin.file:
+        path: /etc/letsencrypt/live/
+        owner: "{{ ansible_user }}"
+        group: "{{ ansible_user }}"
+        mode: "755"
+
     
 
     
