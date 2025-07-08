@@ -136,11 +136,12 @@
     # New: add task to generate certificate using certbot
     - name: Create SSL certificate for HTTPS
       shell: |
-        certbot --nginx \
+        certbot renew --nginx \
         --non-interactive \
-        -- agree-tos \
-        -- email bao.phungus.26@gmail.com \
-        -d {{ domain }}
+        --agree-tos \
+        --email bao.phungus.26@gmail.com \
+        -d {{ domain }} \
+        --force-renewal --redirect
       args:
         creates: /etc/letsencrypt/live/{{ domain }}
 
