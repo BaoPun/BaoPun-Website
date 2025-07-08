@@ -23,6 +23,7 @@
           - git
           - nodejs
           - certbot
+          - python3-certbot-nginx
         state: present
 
     - name: Add ec2-user to Docker group
