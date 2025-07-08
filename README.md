@@ -13,6 +13,8 @@ This repository contains all the source code for my website.  [Click here](https
 
 # Website Updates (will chronologically update with added features)
 - Deployed website to https://www.baopunny.studio with SSL certificate for HTTPS support.
+- About Me Page is now complete.  Navigation bar can now be hidden by clicking anywhere (except for the contents themselves).
+- Initial testing of About Me page done.  
 
 # Deployment Details
 ### Frameworks
