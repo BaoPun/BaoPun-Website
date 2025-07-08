@@ -1,5 +1,6 @@
 import styles from '../Styles/style.module.css';
 import { Link } from 'react-router';
+import Navigation from '../Components/Navigation';
 import type { Route } from "./+types/home";
 
 export function meta({}: Route.MetaArgs) {
@@ -31,13 +32,7 @@ export default function NotFoundPage(){
 
 
             {/* Creating side bar content, which will be styled with css content later */}
-            <div id={styles['left-side-nav']}>
-                <ol>
-                    <li><Link to="/Projects">Projects</Link></li>
-                    <li><Link to="/About">About Me</Link></li>
-                    <li><Link to="/MarioKart">Mario Kart</Link></li>
-                </ol>
-            </div>
+            <Navigation />
         
         </>
     );
