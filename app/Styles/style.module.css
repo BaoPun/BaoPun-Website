@@ -225,6 +225,30 @@ a.secondary {
   padding: 5px 4px 10px;
 }
 
+/* Project.js styling */
+.projectContainer{
+  background-color: black;
+}
+
+.projectContainer h1{
+  text-align: center;
+  font-size: 28px;
+}
+
+.projectList{
+  background-color: black;
+  
+}
+
+.projects{
+  background-color: #1e6c0ba1;
+  padding: 10px;
+  border-style: groove;
+  border-color: red;
+  border-width: 3px;
+  margin-top: 0.25%;
+}
+
 /* About.js styling */
 .aboutContainer{
   background-color: black;
@@ -232,7 +256,7 @@ a.secondary {
 
 .aboutDescription h1{
   text-align: center;
-  font-size: 28px
+  font-size: 28px;
 }
 
 .aboutDescription p{

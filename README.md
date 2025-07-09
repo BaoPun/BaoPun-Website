@@ -7,14 +7,16 @@ This repository contains all the source code for my website.  [Click here](https
 - Score Tracker page within Mario Kart page is set up via clicking on 6 possible formats.
 
 # Website Upcoming Features
-- About Me and Projects pages to be implemented
+- On the project page, add a feature to filter projects based on languages/frameworks/tools used
 - In Score Tracker page, implement feature to copy current team standings after inputting all teams
-- Mobile support for competitive Mario Kart score tracking
+- Mobile support for competitive Mario Kart score tracking and the entire website in general
 
 # Website Updates (will chronologically update with added features)
 - Deployed website to https://www.baopunny.studio with SSL certificate for HTTPS support.
 - About Me Page is now complete.  Navigation bar can now be hidden by clicking anywhere (except for the contents themselves).
-- Initial testing of About Me page done.  
+- Testing of About Me page done.  
+- Initial contents of Projects have been populated.  Clicking on a project will expand/collapse additional details.
+- Initial testing of Projects pre-filter have passed.
 
 # Deployment Details
 ### Frameworks
