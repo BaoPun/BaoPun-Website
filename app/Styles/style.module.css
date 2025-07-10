@@ -249,6 +249,23 @@ a.secondary {
   margin-top: 0.25%;
 }
 
+.projectFilterContainer{
+  display: block;
+  text-align: center;
+  justify-content: center;
+}
+
+/*#filterForm{
+  display: block;
+  text-align: center;
+}*/
+
+#filterTextButton{
+  background-color: red;
+  border-style: inset;
+  border-width: 3px;
+}
+
 /* About.js styling */
 .aboutContainer{
   background-color: black;
@@ -303,6 +320,8 @@ a.secondary {
   justify-content: center;
   align-items: center;
   gap: 0.25%;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .formatButton{

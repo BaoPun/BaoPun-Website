@@ -44,4 +44,14 @@ describe('On the Project page', () => {
         // This time, the url of the project should not be visible
         expect(screen.queryByText('https://www.github.com/BaoPun/PokemonSimulator')).not.toBeInTheDocument();
     })
+
+    test('entering \'pokemon sim\' in the filter should show the Pokemon Simulator project', async () => {
+        // Enter in pokemon sim on the text box
+        const filterInput = screen.getByRole('textbox', { name: /filter by name or description/i });
+        await userEvent.type(filterInput, 'pokemon sim');
+
+        await waitFor(() => {
+            expect(screen.getByText(/pokemon simulator/i)).toBeInTheDocument();
+        });
+    });
 });
