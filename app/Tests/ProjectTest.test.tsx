@@ -52,6 +52,7 @@ describe('On the Project page', () => {
 
         await waitFor(() => {
             expect(screen.getByText(/pokemon simulator/i)).toBeInTheDocument();
+            
         });
     });
 });
