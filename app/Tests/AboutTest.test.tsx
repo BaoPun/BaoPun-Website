@@ -1,9 +1,6 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import HomePage from '../Pages/HomePage';
 import MarioKartPage from '../Pages/MarioKart'; 
-import ScoreTrackerPage from '../Pages/ScoreTracker';
 import AboutPage from '../Pages/AboutPage';
-import NotFoundPage from '../Pages/404Page';
 import { MemoryRouter, Routes, Route, Router } from 'react-router';
 import userEvent from '@testing-library/user-event';
 import { vi } from 'vitest';
@@ -33,7 +30,5 @@ describe('On the About page', () => {
         // Assert that 'mario kart' is rendered on the new page
         //await expect(document.title).toEqual('Mario Kart');
         expect(screen.getAllByText(/competitive mario kart/i).length > 0).toBe(true);
-        //expect(document.title).toBe('Mario Kart');
-        console.log('Document title: ' + document.title);
     });
 });

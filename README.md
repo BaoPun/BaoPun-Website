@@ -7,7 +7,7 @@ This repository contains all the source code for my website.  [Click here](https
 - Score Tracker page within Mario Kart page is set up via clicking on 6 possible formats.
 
 # Website Upcoming Features
-- On the project page, add a feature to filter projects based on languages/frameworks/tools used
+- Writing more robust test cases for filtering.  Need to test filtering via selecting checkboxes.
 - In Score Tracker page, implement feature to copy current team standings after inputting all teams
 - Mobile support for competitive Mario Kart score tracking and the entire website in general
 
@@ -17,6 +17,7 @@ This repository contains all the source code for my website.  [Click here](https
 - Testing of About Me page done.  
 - Initial contents of Projects have been populated.  Clicking on a project will expand/collapse additional details.
 - Initial testing of Projects pre-filter have passed.
+- Filtering implemented and initial test cases written.  Next test cases will be via filtering with checkboxes.
 
 # Deployment Details
 ### Frameworks

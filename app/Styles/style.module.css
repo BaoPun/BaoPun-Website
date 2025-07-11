@@ -266,6 +266,26 @@ a.secondary {
   border-width: 3px;
 }
 
+.projectLanguageFilter, .projectFrameworkFilter, .projectToolFilter{
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.projectChooseToFilter{
+  background-color: orange;
+  display: block;
+  margin: auto;
+
+  /* Adding a border around the div */
+  border-style: ridge;
+  border-width: 8px;
+  border-color: green;
+  border-radius: 2.5%;
+}
+
+
 /* About.js styling */
 .aboutContainer{
   background-color: black;

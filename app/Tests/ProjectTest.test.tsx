@@ -43,16 +43,49 @@ describe('On the Project page', () => {
 
         // This time, the url of the project should not be visible
         expect(screen.queryByText('https://www.github.com/BaoPun/PokemonSimulator')).not.toBeInTheDocument();
-    })
+    });
+
+    test('clicking on the show filter button should show all of the filters', async () => {
+        // Click on the show filter button 
+        await userEvent.click(screen.getByText(/show filter/i));
+
+        await waitFor(() => {
+            expect(screen.getByText(/filter by languages/i)).toBeInTheDocument();
+            expect(screen.getByText(/filter by frameworks/i)).toBeInTheDocument();
+            expect(screen.getByText(/filter by tools/i)).toBeInTheDocument();
+            expect(screen.getByText(/filter by databases/i)).toBeInTheDocument();
+        });
+    });
 
     test('entering \'pokemon sim\' in the filter should show the Pokemon Simulator project', async () => {
+        // Click on the show filter button 
+        await userEvent.click(screen.getByText(/show filter/i));
+
         // Enter in pokemon sim on the text box
         const filterInput = screen.getByRole('textbox', { name: /filter by name or description/i });
         await userEvent.type(filterInput, 'pokemon sim');
 
         await waitFor(() => {
             expect(screen.getByText(/pokemon simulator/i)).toBeInTheDocument();
-            
+
         });
     });
+
+    test('clicking twice on the filter button should not show the filters anymore', async () => {
+        // Click twice
+        await userEvent.click(screen.getByText(/show filter/i));
+        await userEvent.click(screen.getByText(/hide filter/i));
+
+        // The filters should no longer be there
+        await waitFor(() => {
+            expect(screen.queryByText(/filter by languages/i)).not.toBeInTheDocument();
+            expect(screen.queryByText(/filter by frameworks/i)).not.toBeInTheDocument();
+            expect(screen.queryByText(/filter by tools/i)).not.toBeInTheDocument();
+            expect(screen.queryByText(/filter by databases/i)).not.toBeInTheDocument();
+        });
+    })
+
+    // TODO: additional test cases to properly filter by project
+
+    
 });
