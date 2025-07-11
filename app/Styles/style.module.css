@@ -276,7 +276,6 @@ a.secondary {
 .projectChooseToFilter{
   background-color: orange;
   display: block;
-  margin: auto;
 
   /* Adding a border around the div */
   border-style: ridge;

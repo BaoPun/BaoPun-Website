@@ -149,23 +149,14 @@ export default function ProjectPage(){
 
     // Flag to indicate whether or not we clicked on the "filter button"
     const [filterEnabled, setFilterEnabled] = useState<boolean>(false);
-    const filterEnabledText = useRef<string>('Show Filters');
+    const [filterEnabledText, setFilterEnabledText] = useState<string>('Show Filters');
+    //const filterEnabledText = useRef<string>('Show Filters');
 
     // Function to toggle on/off the filter container
     function toggleFilter(){
         setFilterEnabled(!filterEnabled);
+        setFilterEnabledText(filterEnabled ? 'Show Filters' : 'Hide Filters');
     }
-
-    // Useeffect that triggers on filterEnabled state
-    // Here, we change the text
-    useEffect(() => {
-        if(filterEnabled){
-            filterEnabledText.current = 'Show Filters';
-        }
-        else{
-            filterEnabledText.current = 'Hide Filters';
-        }
-    }, [filterEnabled]);
     
 
     // Create a separate project list for the filtering
@@ -384,7 +375,7 @@ export default function ProjectPage(){
                         Array.from(languagesFilterList).map((language, index) => (
                             <span key={index} style={{ marginRight: '1.2%' }}>  
                                 <input /*key={index}*/ type="checkbox" name={language} value={language} style={{ marginRight: '5px' }} onChange={checkboxLanguageHandler} checked={languageIsChecked(language)} />
-                                <label /*key={index + projects.length}*/ htmlFor={language}>{language}</label>
+                                <label /*key={index + projects.length}*/ htmlFor={language} onClick={(e) => checkboxLanguageHandler(e)} >{language}</label>
                             </span> 
                         ))
                     }
@@ -451,8 +442,8 @@ export default function ProjectPage(){
                 <p><Link to="/" style={{'color': 'cyan', 'fontSize': '20px'}}>Click Here</Link> to return to the home page.</p><br/>
             </div>
 
-            <div className={styles.projectChooseToFilter} onClick={() => toggleFilter()}>
-                <h1 style={{ textAlign: 'center', color: 'red' }}>{filterEnabledText.current}</h1><br/>
+            <div className={styles.projectChooseToFilter} onClick={toggleFilter}>
+                <h1 style={{ textAlign: 'center', color: 'red' }}>{filterEnabledText}</h1><br/>
             </div><br/><br/>
 
             
