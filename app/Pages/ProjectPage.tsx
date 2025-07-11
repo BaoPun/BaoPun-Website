@@ -269,6 +269,22 @@ export default function ProjectPage(){
             ))
         });
 
+        // If the label is clicked, then also handle uncheck/check logic
+        function labelLanguageClickHandler(language : string) : void{
+            // If the language is already in the filters, remove it (uncheck)
+            // Otherwise, add it to the filters (check)
+            if(checkedLanguageFilters.has(language)){
+                setCheckedLanguageFilters((filters) => {
+                    const newFilters = new Set(filters);
+                    newFilters.delete(language);
+                    return newFilters;
+                })
+            }
+            else{
+                setCheckedLanguageFilters((filters) => new Set(filters).add(language));
+            }
+        }
+
         // Function to deal with each framework checkbox change
         function checkboxLanguageHandler(event){
             // Grab the specific checkbox
@@ -283,13 +299,29 @@ export default function ProjectPage(){
                     const newFilters = new Set(filters);
                     newFilters.delete(value);
                     return newFilters;
-                })
+                });
             }
         }
 
         // Function to determine if language filter contains the checked language
         function languageIsChecked(language : string) : boolean {
             return checkedLanguageFilters.has(language);
+        }
+
+        // If the label is clicked, then also handle uncheck/check logic
+        function labelFrameworkClickHandler(framework){
+            // If the language is already in the filters, remove it (uncheck)
+            // Otherwise, add it to the filters (check)
+            if(checkedFrameworkFilters.has(framework)){
+                setCheckedFrameworkFilters((filters) => {
+                    const newFilters = new Set(filters);
+                    newFilters.delete(framework);
+                    return newFilters;
+                })
+            }
+            else{
+                setCheckedFrameworkFilters((filters) => new Set(filters).add(framework));
+            }
         }
 
         // Function to deal with each framework checkbox change
@@ -315,6 +347,22 @@ export default function ProjectPage(){
             return checkedFrameworkFilters.has(framework);
         }
 
+        // If the label is clicked, then also handle uncheck/check logic
+        function labelToolClickHandler(tool){
+            // If the language is already in the filters, remove it (uncheck)
+            // Otherwise, add it to the filters (check)
+            if(checkedToolFilters.has(tool)){
+                setCheckedToolFilters((filters) => {
+                    const newFilters = new Set(filters);
+                    newFilters.delete(tool);
+                    return newFilters;
+                })
+            }
+            else{
+                setCheckedToolFilters((filters) => new Set(filters).add(tool));
+            }
+        }
+
         // Function to deal with each tool checkbox change
         function checkboxToolHandler(event){
             // Grab the specific checkbox
@@ -336,6 +384,22 @@ export default function ProjectPage(){
         // Function to determine if tool filter contains the checked tool
         function toolIsChecked(tool : string) : boolean {
             return checkedToolFilters.has(tool);
+        }
+
+        // If the label is clicked, then also handle uncheck/check logic
+        function labelDatabaseClickHandler(database){
+            // If the language is already in the filters, remove it (uncheck)
+            // Otherwise, add it to the filters (check)
+            if(checkedDatabaseFilters.has(database)){
+                setCheckedDatabaseFilters((filters) => {
+                    const newFilters = new Set(filters);
+                    newFilters.delete(database);
+                    return newFilters;
+                })
+            }
+            else{
+                setCheckedDatabaseFilters((filters) => new Set(filters).add(database));
+            }
         }
 
         // Function to deal with each database checkbox change
@@ -375,7 +439,7 @@ export default function ProjectPage(){
                         Array.from(languagesFilterList).map((language, index) => (
                             <span key={index} style={{ marginRight: '1.2%' }}>  
                                 <input /*key={index}*/ type="checkbox" name={language} value={language} style={{ marginRight: '5px' }} onChange={checkboxLanguageHandler} checked={languageIsChecked(language)} />
-                                <label /*key={index + projects.length}*/ htmlFor={language} onClick={(e) => checkboxLanguageHandler(e)} >{language}</label>
+                                <label /*key={index + projects.length}*/ htmlFor={language} onClick={() => labelLanguageClickHandler(language)} >{language}</label>
                             </span> 
                         ))
                     }
@@ -388,7 +452,7 @@ export default function ProjectPage(){
                         Array.from(frameworksFilterList).map((framework, index) => (
                             <span key={index} style={{ marginRight: '1.2%' }}>  
                                 <input type="checkbox" name={framework} value={framework} style={{ marginRight: '5px' }} onChange={checkboxFrameworkHandler} checked={frameworkIsChecked(framework)} />
-                                <label htmlFor={framework}>{framework}</label>
+                                <label htmlFor={framework} onClick={() => labelFrameworkClickHandler(framework)} >{framework}</label>
                             </span> 
                         ))
                     }
@@ -401,7 +465,7 @@ export default function ProjectPage(){
                         Array.from(toolsFilterList).map((tool, index) => (
                             <span key={index} style={{ marginRight: '1.2%' }}>  
                                 <input type="checkbox" name={tool} value={tool} style={{ marginRight: '5px' }} onChange={checkboxToolHandler} checked={toolIsChecked(tool)} />
-                                <label htmlFor={tool}>{tool}</label>
+                                <label htmlFor={tool} onClick={() => labelToolClickHandler(tool)} >{tool}</label>
                             </span> 
                         ))
                     }
@@ -416,7 +480,7 @@ export default function ProjectPage(){
                                 Array.from(databasesFilterList).map((database, index) => (
                                     <span key={index} style={{ marginRight: '1.2%' }}>  
                                         <input type="checkbox" name={database} value={database} style={{ marginRight: '5px' }} onChange={checkboxDatabaseHandler} checked={databaseIsChecked(database)} />
-                                        <label htmlFor={database}>{database}</label>
+                                        <label htmlFor={database} onClick={() => labelDatabaseClickHandler(database)} >{database}</label>
                                     </span> 
                                 ))
                             }
