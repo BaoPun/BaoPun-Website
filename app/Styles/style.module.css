@@ -225,6 +225,66 @@ a.secondary {
   padding: 5px 4px 10px;
 }
 
+/* Project.js styling */
+.projectContainer{
+  background-color: black;
+}
+
+.projectContainer h1{
+  text-align: center;
+  font-size: 28px;
+}
+
+.projectList{
+  background-color: black;
+  
+}
+
+.projects{
+  background-color: #1e6c0ba1;
+  padding: 10px;
+  border-style: groove;
+  border-color: red;
+  border-width: 3px;
+  margin-top: 0.25%;
+}
+
+.projectFilterContainer{
+  display: block;
+  text-align: center;
+  justify-content: center;
+}
+
+/*#filterForm{
+  display: block;
+  text-align: center;
+}*/
+
+#filterTextButton{
+  background-color: red;
+  border-style: inset;
+  border-width: 3px;
+}
+
+.projectLanguageFilter, .projectFrameworkFilter, .projectToolFilter, .projectDatabaseFilter, .projectFilter{
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 5px;
+}
+
+.projectChooseToFilter{
+  background-color: orange;
+  display: block;
+
+  /* Adding a border around the div */
+  border-style: ridge;
+  border-width: 8px;
+  border-color: green;
+  border-radius: 2.5%;
+}
+
+
 /* About.js styling */
 .aboutContainer{
   background-color: black;
@@ -232,7 +292,7 @@ a.secondary {
 
 .aboutDescription h1{
   text-align: center;
-  font-size: 28px
+  font-size: 28px;
 }
 
 .aboutDescription p{
@@ -279,6 +339,8 @@ a.secondary {
   justify-content: center;
   align-items: center;
   gap: 0.25%;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 .formatButton{
