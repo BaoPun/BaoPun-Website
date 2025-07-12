@@ -266,7 +266,7 @@ a.secondary {
   border-width: 3px;
 }
 
-.projectLanguageFilter, .projectFrameworkFilter, .projectToolFilter{
+.projectLanguageFilter, .projectFrameworkFilter, .projectToolFilter, .projectDatabaseFilter, .projectFilter{
   display: grid;
   justify-content: center;
   grid-template-columns: repeat(3, 1fr);
