@@ -37,8 +37,9 @@ describe('On the MarioKart page', () => {
             </MemoryRouter>
         );
 
-        // Click on the 'Click Here' button
-        fireEvent.click(screen.getByText(/Click Here/i));
+        // Click on the first 'Click Here' button
+        // Update: since the Mario Kart page now has two "click here" sections, grab all of them, and choose only the firstqqqq
+        fireEvent.click(screen.getAllByText(/Click Here/i)[0]);
 
         // Assert that we are on the home page via the title
         expect(screen.getByText('Information about Bao Phung')).toBeInTheDocument();
