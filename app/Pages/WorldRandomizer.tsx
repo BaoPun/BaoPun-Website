@@ -160,8 +160,8 @@ export default function WorldRandomizerPage(){
             <br/>
             <form>
                 <input type='checkbox' id='removeFromPool' name='removeFromPool' onChange={(e) => removePoolCheckboxOnHandler(e)} checked={isRemovePoolChecked} />
-                <label htmlFor='removeFromPool'>Remove from Pool</label><br/>
-                <input type='button' value='Click to restore the pool' onClick={() => resetTrackPool()}/>
+                <label htmlFor='removeFromPool' style={{fontSize: '20px', marginLeft: '5px'}}>Remove from Pool</label><br/>
+                <input type='button' value='Click to restore the pool' onClick={() => resetTrackPool()}  style={{fontSize: '20px', marginTop: '35px'}} />
             </form>
         </div>
     );
