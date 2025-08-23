@@ -13,38 +13,15 @@ export function meta({}: Route.MetaArgs) {
 
 export default function WorldRandomizerPage(){
     // Map integer to shorthanded track names
-    const tracksToId : {[key: number]: string} = {
-        1: 'DKS',
-        2: 'KTB',
-        3: 'RR',
-        4: 'CC',
-        5: 'WS',
-        6: 'rDH',
-        7: 'MBC',
-        8: 'PS',
-        9: 'rCM',
-        10: 'FO',
-        11: 'rDDJ',
-        12: 'GBR',
-        13: 'rPB',
-        14: 'SSS',
-        15: 'CCF',
-        16: 'rMMM',
-        17: 'rTF',
-        18: 'rWS',
-        19: 'rSGB',
-        20: 'rWSh',
-        21: 'rDKP',
-        22: 'DD',
-        23: 'rMC',
-        24: 'rSHS',
-        25: 'SP',
-        26: 'BCi',
-        27: 'AH',
-        28: 'DBB',
-        29: 'BC',
-        30: 'rAF'
-    }
+    const tracksToId : string[] = [
+        'DKS', 'KTB', 'RR', 'CC', 'WS', 
+        'rDH', 'MBC', 'PS', 'rCM', 'FO', 
+        'rDDJ', 'GBR', 'rPB', 'SSS', 'CCF', 
+        'rMMM', 'rTF', 'rWS', 'rSGB', 'rWSh', 
+        'rDKP', 'DD', 'rMC', 'rSHS', 'SP', 
+        'BCi', 'AH', 'DBB', 'BC', 'rAF',
+    ];
+
     // Set up the names of all 30 tracks in Mario Kart World
     const tracksList : {[key: string]: string}  = {
         'DKS': 'DK Spaceport', 
@@ -89,19 +66,19 @@ export default function WorldRandomizerPage(){
 
     // Get a random image
     const randomTrack = () => {
-        const trackId = Math.floor(Math.random() * Object.keys(trackPool).length + 1);
-        /*while(!trackPool.hasOwnProperty(tracksToId[trackId])){
-            trackId = Math.floor(Math.random() * Object.keys(tracksList).length + 1);
-        }*/
+        let trackId = Math.floor(Math.random() * tracksToId.length);
+        while(!(tracksToId[trackId] in trackPool)){
+            trackId = Math.floor(Math.random() * tracksToId.length);
+        }
         setTrack(tracksToId[trackId]);
     };
 
     // Remove track from the pool
-    const removeTrackFromPool = (track : string) => {
+    const removeTrackFromPool = () => {
         const trackPoolCopy = trackPool;
         delete trackPoolCopy[track];
         setTrackPool(trackPoolCopy);
-    }
+    };
 
     // When the stop button is clicked, switch the flags
     function randomButtonOnClick(){
@@ -126,15 +103,13 @@ export default function WorldRandomizerPage(){
             trackRef.current = setInterval(randomTrack, 50);
         }
         else{
-            if(!isRandomizing){
-                // Remove from the pool, but only if the checkbox is checked
-                if(isRemovePoolChecked){
-                    removeTrackFromPool(track);
+            // Remove from the pool, but only if the checkbox is checked
+            if(isRemovePoolChecked){
+                removeTrackFromPool();
 
-                    // However, if the track pool becomes empty after doing this, reset the pool
-                    if(Object.keys(trackPool).length === 0){
-                        resetTrackPool();
-                    }
+                // However, if the track pool becomes empty after doing this, reset the pool
+                if(Object.keys(trackPool).length === 0){
+                    resetTrackPool();
                 }
             }
         }
