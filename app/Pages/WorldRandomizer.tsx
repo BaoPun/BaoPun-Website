@@ -123,18 +123,16 @@ export default function WorldRandomizerPage(){
     // However, once the button is clicked, remove the track from the pool on future randomizations.
     useEffect(() => {
         if(isRandomizing){
-            trackRef.current = setInterval(randomTrack, 50);
+            trackRef.current = setInterval(randomTrack, 100);
         }
         else{
-            if(!isRandomizing){
-                // Remove from the pool, but only if the checkbox is checked
-                if(isRemovePoolChecked){
-                    removeTrackFromPool(track);
+            // Remove from the pool, but only if the checkbox is checked
+            if(isRemovePoolChecked){
+                removeTrackFromPool(track);
 
-                    // However, if the track pool becomes empty after doing this, reset the pool
-                    if(Object.keys(trackPool).length === 0){
-                        resetTrackPool();
-                    }
+                // However, if the track pool becomes empty after doing this, reset the pool
+                if(Object.keys(trackPool).length === 0){
+                    resetTrackPool();
                 }
             }
         }
