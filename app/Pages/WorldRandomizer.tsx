@@ -89,10 +89,10 @@ export default function WorldRandomizerPage(){
 
     // Get a random image
     const randomTrack = () => {
-        let trackId = Math.floor(Math.random() * Object.keys(tracksList).length + 1);
-        while(!trackPool.hasOwnProperty(tracksToId[trackId])){
+        const trackId = Math.floor(Math.random() * Object.keys(trackPool).length + 1);
+        /*while(!trackPool.hasOwnProperty(tracksToId[trackId])){
             trackId = Math.floor(Math.random() * Object.keys(tracksList).length + 1);
-        }
+        }*/
         setTrack(tracksToId[trackId]);
     };
 
@@ -133,7 +133,7 @@ export default function WorldRandomizerPage(){
 
                     // However, if the track pool becomes empty after doing this, reset the pool
                     if(Object.keys(trackPool).length === 0){
-                        setTrackPool(tracksList);
+                        resetTrackPool();
                     }
                 }
             }
@@ -155,8 +155,9 @@ export default function WorldRandomizerPage(){
                 <p><Link to="/MarioKart" style={{'color': 'cyan', 'fontSize': '20px'}}>Click Here</Link> to return to the Mario Kart page.</p><br/>
             </div>
 
-            <h1>Click on the icon to stop/start the track wheel.</h1>
-            {track !== '' && <img id={styles.stopRandomButton} src={`/${track}.jpg`} width={150} height={150} alt={tracksList[track]} onClick={randomButtonOnClick} />}
+            <h1>Click on the icon to stop/start the track wheel.</h1><br/>
+            {track !== '' && <img id={styles.stopRandomButton} src={`/${track}.jpg`} width={250} height={250} alt={tracksList[track]} onClick={randomButtonOnClick} />}
+            <br/>
             <form>
                 <input type='checkbox' id='removeFromPool' name='removeFromPool' onChange={(e) => removePoolCheckboxOnHandler(e)} checked={isRemovePoolChecked} />
                 <label htmlFor='removeFromPool'>Remove from Pool</label><br/>
