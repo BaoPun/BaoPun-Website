@@ -18,6 +18,7 @@ This repository contains all the source code for my website.  [Click here](https
 - Initial contents of Projects have been populated.  Clicking on a project will expand/collapse additional details.
 - Initial testing of Projects pre-filter have passed.
 - Filtering implemented and initial test cases written.  Next test cases will be via filtering with checkboxes.
+- Due to Mario Kart World's 1.2 update, random tracks online can still be "connected".  A friend lobby version has been implemented to randomize tracks.
 
 # Deployment Details
 ### Frameworks

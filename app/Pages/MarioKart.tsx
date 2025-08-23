@@ -65,6 +65,9 @@ export default function MarioKartPage(){
             <div className={styles.title}>
                 <h1 id={styles.aboutTitle}>Mario Kart</h1>
                 <p><Link to="/" style={{'color': 'cyan', 'fontSize': '20px'}}>Click Here</Link> to return to the home page.</p><br/>
+                {/* Mario Kart World Randomizer (leads to a new page) */}
+                <h1 style={{'fontSize': '30px'}}>Mario Kart World Track Randomizer</h1>
+                <p><Link to='/MarioKart/MKWorld' style={{'color': 'cyan', 'fontSize': '20px'}}>Click here</Link> to randomize Mario Kart World tracks.</p>
             </div>
 
             {/* Provide information about competitive Mario Kart */}
@@ -93,6 +96,8 @@ export default function MarioKartPage(){
                     </ul>
                 </p>
             </div>
+
+            
 
             {/* Format selector page component */}
             <FormatSelectorPage />

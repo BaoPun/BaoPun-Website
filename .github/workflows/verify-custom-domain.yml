@@ -10,6 +10,7 @@ on:
       - httpsConfiguration
       - aboutPage
       - projectsPage
+      - trackRandomizer
       - main
 
 jobs:

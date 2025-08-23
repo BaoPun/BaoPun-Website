@@ -380,3 +380,17 @@ a.secondary {
   font-size: 20px;
   padding: 20px;
 }
+
+/* WorldRandomizer.js styling */
+.randomizerContainer{
+  display: block;
+  background-color: navy;
+  text-align: center;
+  justify-content: center;
+}
+
+#stopRandomButton{
+  background-color: orchid;
+  margin-left: auto;
+  margin-right: auto;
+}
