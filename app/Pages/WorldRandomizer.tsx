@@ -61,22 +61,25 @@ export default function WorldRandomizerPage(){
     const [isRandomizing, setIsRandomizing] = useState<boolean>(true);
     const [track, setTrack] = useState<string>("");
     const trackRef = useRef(null);
-    const [trackPool, setTrackPool] = useState<{[key: string]: string}>(tracksList);
+    const [trackPool, setTrackPool] = useState<string[]>(tracksToId);//useState<{[key: string]: string}>(tracksList);
     const [isRemovePoolChecked, setIsRemovePoolChecked] = useState<boolean>(true);
 
     // Get a random image
-    const randomTrack = () => {
-        let trackId = Math.floor(Math.random() * tracksToId.length);
+    const getRandomTrack = () => {
+        /*let trackId = Math.floor(Math.random() * tracksToId.length);
         while(!(tracksToId[trackId] in trackPool)){
             trackId = Math.floor(Math.random() * tracksToId.length);
         }
-        setTrack(tracksToId[trackId]);
+        setTrack(tracksToId[trackId]);*/
+        const trackId = Math.floor(Math.random() * trackPool.length);
+        setTrack(trackPool[trackId]);
     };
 
     // Remove track from the pool
     const removeTrackFromPool = () => {
-        const trackPoolCopy = trackPool;
-        delete trackPoolCopy[track];
+        let trackPoolCopy = trackPool;
+        //delete trackPoolCopy[track];
+        trackPoolCopy = trackPoolCopy.filter(t => t !== track);
         setTrackPool(trackPoolCopy);
     };
 
@@ -92,7 +95,8 @@ export default function WorldRandomizerPage(){
     }
 
     function resetTrackPool(){
-        setTrackPool(tracksList);
+        setTrackPool(tracksToId);
+        //setTrackPool(tracksList);
         alert('Track pool has been reset.');
     }
 
@@ -100,26 +104,28 @@ export default function WorldRandomizerPage(){
     // However, once the button is clicked, remove the track from the pool on future randomizations.
     useEffect(() => {
         if(isRandomizing){
-            trackRef.current = setInterval(randomTrack, 50);
+            trackRef.current = setInterval(getRandomTrack, 50); // every 50 ms, generate a random track if the randomizing flag is active
         }
         else{
             // Remove from the pool, but only if the checkbox is checked
             if(isRemovePoolChecked){
                 removeTrackFromPool();
+            }
 
-                // However, if the track pool becomes empty after doing this, reset the pool
-                if(Object.keys(trackPool).length === 0){
-                    resetTrackPool();
-                }
+            // If the track pool becomes empty after doing this, reset the pool
+            if(/*Object.keys(trackPool).length*/trackPool.length <= 1 && isRemovePoolChecked){
+                resetTrackPool();
             }
         }
+
+        
 
         return () => {
             if(trackRef.current){
                 clearInterval(trackRef.current);
             }
         }
-    }, [isRandomizing]);
+    }, [isRandomizing/*, trackPool*/]);
 
     // Render the html content
     return (
@@ -130,7 +136,9 @@ export default function WorldRandomizerPage(){
                 <p><Link to="/MarioKart" style={{'color': 'cyan', 'fontSize': '20px'}}>Click Here</Link> to return to the Mario Kart page.</p><br/>
             </div>
 
-            <h1>Click on the icon to stop/start the track wheel.</h1><br/>
+            {/* Randomization content, including how many tracks are in the pool */}
+            <h1>{trackPool.length} tracks currently in the pool</h1><br/>
+            <h1>Click on the icon to {isRandomizing ? 'stop' : 'start'} the track wheel.</h1><br/>
             {track !== '' && <img id={styles.stopRandomButton} src={`/${track}.jpg`} width={250} height={250} alt={tracksList[track]} onClick={randomButtonOnClick} />}
             <br/>
             <form>
