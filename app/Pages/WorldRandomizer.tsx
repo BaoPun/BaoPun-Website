@@ -126,7 +126,7 @@ export default function WorldRandomizerPage(){
         <div className={styles.randomizerContainer}>
             {/* Add title at the top  */}
             <div className={styles.title}>
-                <h1 id={styles.aboutTitle}>Mario Kart</h1>
+                <h1 id={styles.aboutTitle}>Mario Kart World Track Randomizer</h1>
                 <p><Link to="/MarioKart" style={{'color': 'cyan', 'fontSize': '20px'}}>Click Here</Link> to return to the Mario Kart page.</p><br/>
             </div>
 
