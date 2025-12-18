@@ -24,6 +24,7 @@
           - nodejs
           - certbot
           - python3-certbot-nginx
+          - cronie
         state: present
 
     - name: Add ec2-user to Docker group
@@ -35,6 +36,12 @@
     - name: Start & enable Docker service
       service:
         name: docker
+        state: started
+        enabled: yes
+
+    - name: Start & enable crond service
+      service:
+        name: crond
         state: started
         enabled: yes
 
@@ -150,7 +157,7 @@
     
     # New: add task to generate certificate using certbot
     # Update: renew certificate
-    - name: Create SSL certificate for HTTPS
+    - name: Renew SSL certificate for HTTPS
       shell: |
         certbot renew --nginx \
         --non-interactive \
@@ -158,8 +165,6 @@
         --email bao.phungus.26@gmail.com \
         -d {{ domain }} \
         --force-renewal --redirect
-      args:
-        creates: /etc/letsencrypt/live/{{ domain }}
 
     # New: give permission to created directory
     - name: Allow permission for newly created SSL certificate directory
@@ -169,6 +174,9 @@
         group: "{{ ansible_user }}"
         mode: "0755"
 
-    
-
-    
+    - name: Set up certbot renewal cron job
+      cron:
+        name: "certbot renew"
+        minute: "0"
+        hour: "12,0"
+        job: "certbot renew --nginx --quiet"
