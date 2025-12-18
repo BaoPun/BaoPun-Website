@@ -157,14 +157,13 @@
     
     # New: add task to generate certificate using certbot
     # Update: renew certificate
-    - name: Renew SSL certificate for HTTPS
+    - name: Obtain or renew SSL certificate for HTTPS
       shell: |
-        certbot renew --nginx \
-        --non-interactive \
-        --agree-tos \
-        --email bao.phungus.26@gmail.com \
-        -d {{ domain }} \
-        --force-renewal --redirect
+        if [ -d /etc/letsencrypt/live/{{ domain }} ]; then
+          certbot renew --nginx --non-interactive --agree-tos --email bao.phungus.26@gmail.com -d {{ domain }} --force-renewal --redirect
+        else
+          certbot --nginx --non-interactive --agree-tos --email bao.phungus.26@gmail.com -d {{ domain }} --redirect
+        fi
 
     # New: give permission to created directory
     - name: Allow permission for newly created SSL certificate directory
